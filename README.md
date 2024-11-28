@@ -1,5 +1,5 @@
 # TarkovBalisticSimulator
-Project for "Javascript" course @ FMI
+Project for "Advanced Javascript" course @ FMI
 ## The idea of the project is to create a simulation of the ballistics of "Escape from Tarkov".
 
 Escape from Tarkov is a multiplayer tactical first-person shooter that strays from the "arcadey" type
