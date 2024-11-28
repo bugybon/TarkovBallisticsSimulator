@@ -13,3 +13,6 @@ and simulate the result of bullet and other different projectiles' impact on the
 on a variety of user-picked stats like the ones mentioned above - different bullet types, distance, weapon types,
 the angle of impact, armor strength and durability, etc. Our ambitions are huge and we may expand way beyond what
 is mentioned here, but this is a rough approximation of what is to be expected from our project.
+
+## Sketch how the frontend will look
+![Sketch](TarkovBallticsUISketch.png)
