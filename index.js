@@ -6,7 +6,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/pages'));
 app.use(express.static('node_modules'));
-app.use(express.static('models'));
+app.use(express.static('static'));
 
 function globalErrorHandler(err, req, res, next) {
   if (err.code === 'ENOENT')

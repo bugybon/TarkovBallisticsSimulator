@@ -38,9 +38,7 @@
         };
 
         const assets = [
-            'scene',
-            'Samba Dancing',
-            'morph_test'
+            'scene (1)',
         ];
 
 
@@ -74,12 +72,12 @@
             // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
 
             // ground
-            const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
+            const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 200, 200), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
             mesh.rotation.x = - Math.PI / 2;
-            mesh.receiveShadow = true;
+            //mesh.receiveShadow = true;
             scene.add( mesh );
 
-            const grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
+            const grid = new THREE.GridHelper( 200, 20, 0x000000, 0x000000 );
             grid.material.opacity = 0.2;
             grid.material.transparent = true;
             scene.add( grid );
@@ -91,7 +89,7 @@
             renderer.setPixelRatio( window.devicePixelRatio );
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.setAnimationLoop( animate );
-            renderer.shadowMap.enabled = true;
+            //renderer.shadowMap.enabled = true;
             container.appendChild( renderer.domElement );
 
             const controls = new OrbitControls( camera, renderer.domElement );
@@ -116,7 +114,7 @@
         }
 
         function loadAsset( asset ) {
-            loader.load( asset + '.gltf', async function ( gltf ) {
+            loader.load( 'models/' + asset + '.gltf', async function ( gltf ) {
 
             const model = gltf.scene;
 
