@@ -66,7 +66,7 @@ function init() {
     scene.add( grid );
 
     loader = new GLTFLoader( manager );
-    loadAsset( params.asset );
+    loadAsset( params.asset, 'hitbox' );
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -96,11 +96,17 @@ function init() {
 
 }
 
-function loadAsset( asset ) {
+function loadAsset( asset, name ) {
     loader.load( 'models/' + asset + '.gltf', async function ( gltf ) {
 
     const model = gltf.scene;
-    model.name = 'hitbox';
+    model.name = name;
+    model.traverse ( ( o ) => {
+		if ( o.isMesh ) {
+		o.material.metalness = true;
+		o.material.wireframe = true;
+		}
+	} );
 
     // wait until the model can be added to the scene without blocking due to shader compilation
 
