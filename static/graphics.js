@@ -144,7 +144,7 @@ window.addEventListener('click', (event) => {
     raycaster.setFromCamera(pointer, camera);
 
     // Intersect with the scene
-    const hitbox = scene.children.find((group) => group.name == "hitbox");
+    const hitbox = scene.children.filter((group) => group.name == "hitbox");
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
     for (let i = 0; i < intersects.length; i++){
         const clickedObject = intersects[i].object;
