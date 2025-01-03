@@ -16,11 +16,11 @@ const clock = new THREE.Clock();
 const widthAspect=0.5;
 
 const params = {
-    asset: 'body_noarmors_finished_withTextures'
+    asset: 'body3'
 };
 
 const assets = [
-    'body_noarmors_finished_withTextures',
+    'body3',
 ];
 
 
@@ -101,6 +101,13 @@ function loadAsset( asset, name ) {
 
     const model = gltf.scene;
     model.name = name;
+
+    model.traverse((node) => {
+        if (node.name.includes("Hitbox")) {
+            node.visible = false;
+        }
+    });
+    // #!!! RABOTI !!!! maha rendera na hitboxovete
     model.traverse ( ( o ) => {
 		// if ( o.isMesh ) {
 		// o.material.metalness = true;
@@ -155,7 +162,7 @@ window.addEventListener('click', (event) => {
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
     for (let i = 0; i < intersects.length; i++){
         const clickedObject = intersects[i].object;
-        if(clickedObject.name != ""){
+        if(clickedObject.name != "" && !clickedObject.name.toLowerCase().startsWith('bear') ){
             console.log('Clicked object:', clickedObject.name, clickedObject);
         }
     }
