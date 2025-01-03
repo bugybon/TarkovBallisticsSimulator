@@ -16,11 +16,11 @@ const clock = new THREE.Clock();
 const widthAspect=0.5;
 
 const params = {
-    asset: 'scene (2)'
+    asset: 'body_noarmors_finished_withTextures'
 };
 
 const assets = [
-    'scene (2)',
+    'body_noarmors_finished_withTextures',
 ];
 
 
@@ -102,10 +102,11 @@ function loadAsset( asset, name ) {
     const model = gltf.scene;
     model.name = name;
     model.traverse ( ( o ) => {
-		if ( o.isMesh ) {
-		o.material.metalness = true;
-		o.material.wireframe = true;
-		}
+		// if ( o.isMesh ) {
+		// o.material.metalness = true;
+		// o.material.wireframe = true;
+		// }
+        // fuck wireframe ne ni trqbva rn
 	} );
 
     // wait until the model can be added to the scene without blocking due to shader compilation
