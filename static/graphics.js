@@ -162,7 +162,7 @@ window.addEventListener('click', (event) => {
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
     for (let i = 0; i < intersects.length; i++){
         const clickedObject = intersects[i].object;
-        if(clickedObject.name != "" && !clickedObject.name.toLowerCase().startsWith('bear') ){
+        if(clickedObject.name.toLowerCase().includes("hitbox")){
             console.log('Clicked object:', clickedObject.name, clickedObject);
         }
     }
