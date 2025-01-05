@@ -16,11 +16,11 @@ const clock = new THREE.Clock();
 const widthAspect=0.5;
 
 const params = {
-    asset: 'body_armor_and_helmet'
+    asset: 'body_allHitboxes'
 };
 
 const assets = [
-    'body_armor_and_helmet',
+    'body_allHitboxes',
 ];
 
 
