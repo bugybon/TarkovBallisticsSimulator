@@ -16,11 +16,11 @@ const clock = new THREE.Clock();
 const widthAspect=0.5;
 
 const params = {
-    asset: 'bodywithnecksa'
+    asset: 'body_fullArmor'
 };
 
 const assets = [
-    'bodywithnecksa',
+    'body_fullArmor',
 ];
 
 
@@ -160,7 +160,7 @@ window.addEventListener('click', (event) => {
     // Intersect with the scene
     const hitbox = scene.children.filter((group) => group.name == "hitbox");
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
-    scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );``
+    //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
     for (let i = 0; i < intersects.length; i++){
         const clickedObject = intersects[i].object;
         if(clickedObject.name.toLowerCase().includes("hitbox")){
