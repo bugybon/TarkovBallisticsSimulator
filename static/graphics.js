@@ -104,9 +104,13 @@ function loadAsset( asset, name ) {
 
     model.traverse((node) => {
         if (node.name.includes("Hitbox")) {
-            node.visible = false;
+            node.visible = false; // Hide the hitbox
         }
+        // if (node.name.includes("HelmetHitbox")){
+        //     node.layers.set(1);  // Assign the hitbox to layer 1
+        // }
     });
+    
     // #!!! RABOTI !!!! maha rendera na hitboxovete
     model.traverse ( ( o ) => {
 		// if ( o.isMesh ) {
@@ -145,6 +149,8 @@ function onWindowResize() {
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
+
+// raycaster.layers.enable(0);
 // const camera = YOUR_CAMERA; // Replace with your camera
 // const scene = YOUR_SCENE; // Replace with your scene
 
