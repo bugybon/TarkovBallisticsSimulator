@@ -110,16 +110,7 @@ function loadAsset( asset, name ) {
         //     node.layers.set(1);  // Assign the hitbox to layer 1
         // }
     });
-    
-    // #!!! RABOTI !!!! maha rendera na hitboxovete
-    model.traverse ( ( o ) => {
-		// if ( o.isMesh ) {
-		// o.material.metalness = true;
-		// o.material.wireframe = true;
-		// }
-        // fuck wireframe ne ni trqbva rn
-	} );
-
+     
     // wait until the model can be added to the scene without blocking due to shader compilation
 
     await renderer.compileAsync( model, camera, scene );
@@ -151,6 +142,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
 // raycaster.layers.enable(0);
+
 // const camera = YOUR_CAMERA; // Replace with your camera
 // const scene = YOUR_SCENE; // Replace with your scene
 
@@ -160,10 +152,8 @@ window.addEventListener('click', (event) => {
     pointer.x = ((event.clientX / window.innerWidth) * 2 - 1)/widthAspect;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    // Cast a ray from the camera through the pointer
     raycaster.setFromCamera(pointer, camera);
 
-    // Intersect with the scene
     const hitbox = scene.children.filter((group) => group.name == "hitbox");
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
     //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
