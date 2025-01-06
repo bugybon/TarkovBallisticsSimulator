@@ -175,8 +175,6 @@ window.addEventListener('click', (event) => {
     }
 });
 
-//
-
 function animate() {
 
     const delta = clock.getDelta();

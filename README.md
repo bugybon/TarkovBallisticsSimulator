@@ -16,3 +16,9 @@ is mentioned here, but this is a rough approximation of what is to be expected f
 
 ## Sketch how the frontend will look
 ![Sketch](TarkovBallticsUISketch.png)
+
+To do list:
+1) Make data base with chest rigs and armor vests + compatible plates
+    1.1) Make data base for helmets and helmet add-ons
+2) All ammo database
+3) Send data from frontend to backend, work it over, send back from backend to frontend
