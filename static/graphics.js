@@ -83,7 +83,7 @@ function init() {
 
     // stats
     stats = new Stats();
-    container.appendChild( stats.dom );
+    //container.appendChild( stats.dom );
 
     const gui = new GUI();
     gui.add( params, 'asset', assets ).onChange( function ( value ) {
