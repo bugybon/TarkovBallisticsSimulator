@@ -33,7 +33,7 @@ function init() {
     document.body.appendChild( container );
 
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth*widthAspect / window.innerHeight, 1, 2000 );
-    camera.position.set( 10, 20, 30);
+    camera.position.set( 1, 2, 3);
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color( 0xa0a0a0 );
@@ -76,7 +76,7 @@ function init() {
     container.appendChild( renderer.domElement );
 
     const controls = new OrbitControls( camera, renderer.domElement );
-    controls.target.set( 0, 10, 0 );
+    controls.target.set( 0, 1, 0 );
     controls.update();
 
     window.addEventListener( 'resize', onWindowResize );
