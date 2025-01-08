@@ -64,19 +64,15 @@ const queryArmorPlate = graphql_req.gql`{
 
 function getArmorRig(){
     return new Promise((res,rej) => {
-        graphql_req.request(apiUrl, queryArmorRig, (err, content) => {
-            if(err) return rej(err);
-            res(content);
-        });
+        let content = graphql_req.request(apiUrl, queryArmorRig);
+        res(content);
     });
 }
 
 function getArmorPlate(){
-    return new Promise((res,rej) => {
-        graphql_req.request(apiUrl, queryArmorPlate, (err, content) => {
-            if(err) return rej(err);
-            res(content);
-        });
+    return new Promise(async (res,rej) => {
+        let content = await graphql_req.request(apiUrl, queryArmorPlate);
+        res(content);
     });
 }
 
