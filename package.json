@@ -4,7 +4,7 @@
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "graphql": "^16.10.0",
-    "graphql-request": "^6.0.0",
+    "graphql-request": "~6.1.0",
     "three": "^0.171.0"
   }
 }
