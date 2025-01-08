@@ -105,7 +105,7 @@ async function query(options = defaultOptions) {
             }
         }`;
     };
-    const itemData = new Promise(async (resolve, reject) => {
+    const itemData = await new Promise(async (resolve, reject) => {
         let offset = 0;
         const retrievedItems = {
             data: {
