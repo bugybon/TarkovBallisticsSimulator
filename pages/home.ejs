@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ballistic calculator</title>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "/three/build/three.module.js",
+                "three/addons/": "/three/examples/jsm/",
+                "graphql":"/graphql/index.mjs",
+                "graphql-request": "/graphql-request/build/entrypoints/main.js"
+            }
+        }
+    </script>
+
+    <script type="module" src="/graphics.js" async defer></script>
+    <!-- <script type="module" src="/itemQuery.js" async defer></script> -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body style="background-color:white;">
@@ -125,22 +140,5 @@
             });
         }
     </script>
-
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "/three/build/three.module.js",
-                "three/addons/": "/three/examples/jsm/",
-                "graphql":"/graphql/index.mjs",
-                "graphql-request": "/graphql-request/build/entrypoints/main.js"
-            }
-        }
-    </script>
-    <script type="module" src="/graphics.js" async defer></script>
-    <!-- <script type="module" src="/itemQuery.js" async defer></script> -->
-    <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-
 </body>
 </html>

@@ -194,5 +194,5 @@ app.get('/armor', (req, res) => {
 
 app.listen(8080, function () {
   console.log('Server is listening on http//localhost:8080');
-  api.itemQuery.getArmorRig().then((data) => console.log(data));
+  //api.itemQuery.getArmorRig().then((data) => console.log(data));
 })
