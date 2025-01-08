@@ -25,7 +25,155 @@ app.get('/', (req, res) => {
 })
 
 const armorData = [
-  { name: "PACA Soft Armor", class: 2, material: "Aramid" },
+  {
+    "name": "Crye Precision AVS plate carrier (Ranger Green)",
+    "properties": {
+      "armorSlots": [
+        {
+          "nameId": "Front_plate",
+          "allowedPlates": [
+            {
+              "name": "AR500 Legacy Plate ballistic plate"
+            },
+            {
+              "name": "Cult Locust ballistic plate"
+            },
+            {
+              "name": "Cult Termite ballistic plate"
+            },
+            {
+              "name": "GAC 3s15m ballistic plate"
+            },
+            {
+              "name": "GAC 4sss2 ballistic plate"
+            },
+            {
+              "name": "Global Armor’s Steel ballistic plate"
+            },
+            {
+              "name": "Kiba Arms Steel ballistic plate"
+            },
+            {
+              "name": "KITECO SC-IV SA ballistic plate"
+            },
+            {
+              "name": "Kiba Arms Titan ballistic plate"
+            },
+            {
+              "name": "Monoclete level III PE ballistic plate"
+            },
+            {
+              "name": "NESCO 4400-SA-MC ballistic plate"
+            },
+            {
+              "name": "NewSphereTech level III ballistic plate"
+            },
+            {
+              "name": "SPRTN Elaphros ballistic plate"
+            },
+            {
+              "name": "PRTCTR Lightweight ballistic plate"
+            },
+            {
+              "name": "SPRTN Omega ballistic plate"
+            },
+            {
+              "name": "TallCom Guardian ballistic plate"
+            },
+            {
+              "name": "SAPI level III+ ballistic plate"
+            },
+            {
+              "name": "ESAPI level IV ballistic plate"
+            }
+          ]
+        },
+        {
+          "nameId": "Back_plate",
+          "allowedPlates": [
+            {
+              "name": "AR500 Legacy Plate ballistic plate"
+            },
+            {
+              "name": "Cult Locust ballistic plate"
+            },
+            {
+              "name": "Cult Termite ballistic plate"
+            },
+            {
+              "name": "GAC 3s15m ballistic plate"
+            },
+            {
+              "name": "GAC 4sss2 ballistic plate"
+            },
+            {
+              "name": "Global Armor’s Steel ballistic plate"
+            },
+            {
+              "name": "KITECO SC-IV SA ballistic plate"
+            },
+            {
+              "name": "Kiba Arms Steel ballistic plate"
+            },
+            {
+              "name": "Monoclete level III PE ballistic plate"
+            },
+            {
+              "name": "Kiba Arms Titan ballistic plate"
+            },
+            {
+              "name": "NESCO 4400-SA-MC ballistic plate"
+            },
+            {
+              "name": "PRTCTR Lightweight ballistic plate"
+            },
+            {
+              "name": "SPRTN Elaphros ballistic plate"
+            },
+            {
+              "name": "NewSphereTech level III ballistic plate"
+            },
+            {
+              "name": "SPRTN Omega ballistic plate"
+            },
+            {
+              "name": "TallCom Guardian ballistic plate"
+            },
+            {
+              "name": "SAPI level III+ ballistic plate"
+            },
+            {
+              "name": "ESAPI level IV ballistic plate"
+            }
+          ]
+        },
+        {
+          "nameId": "Soft_armor_front",
+          "class": 3,
+          "durability": 42,
+          "material": {
+            "id": "Aramid"
+          }
+        },
+        {
+          "nameId": "Soft_armor_back",
+          "class": 3,
+          "durability": 42,
+          "material": {
+            "id": "Aramid"
+          }
+        },
+        {
+          "nameId": "Groin",
+          "class": 3,
+          "durability": 28,
+          "material": {
+            "id": "Aramid"
+          }
+        }
+      ]
+    }
+  } 
 ];
 
 app.get('/armor', (req, res) => {
