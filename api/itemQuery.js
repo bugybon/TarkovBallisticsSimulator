@@ -1,9 +1,7 @@
-const graphql_req= async () =>{const {gql,request} = await import('graphql-request');
-gql.default();
-request.default()};
+const graphql_req= require('graphql-request');
 
 const apiUrl = 'https://api.tarkov.dev/graphql';
-const queryArmorRig = gql`{
+const queryArmorRig = graphql_req.gql`{
     items(lang: en, types:[armor,rig]) {
         name
         properties{
@@ -48,7 +46,7 @@ const queryArmorRig = gql`{
     }
 }`;
 
-const queryArmorPlate = gql`{
+const queryArmorPlate = graphql_req.gql`{
     items(lang: en, type:armorPlate) {
         name
         properties{
@@ -65,14 +63,20 @@ const queryArmorPlate = gql`{
 }`;
 
 function getArmorRig(){
-    return new Promise((res, rej) => {
-        graphql_req.request(apiUrl, queryArmorRig).then((data) => console.log(data));
+    return new Promise((res,rej) => {
+        graphql_req.request(apiUrl, queryArmorRig, (err, content) => {
+            if(err) return rej(err);
+            res(content);
+        });
     });
 }
 
 function getArmorPlate(){
-    return new Promise((res, rej) => {
-        request(apiUrl, queryArmorPlate).then((data) => console.log(data));
+    return new Promise((res,rej) => {
+        graphql_req.request(apiUrl, queryArmorPlate, (err, content) => {
+            if(err) return rej(err);
+            res(content);
+        });
     });
 }
 
