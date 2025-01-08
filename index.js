@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const api = require('./api');
 
 const app = express();
 
@@ -22,4 +23,5 @@ app.get('/', (req, res) => {
 
 app.listen(8080, function () {
   console.log('Server is listening on http//localhost:8080');
+  api.itemQuery.getArmorRig();
 })
