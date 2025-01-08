@@ -1,8 +1,8 @@
-import { request, gql } from 'graphql-request'
+const graphql_req = require('graphql-request');
 
 const apiUrl = 'https://api.tarkov.dev/graphql';
 
-const query = gql`{
+const queryArmorRig = graphql_req.gql`{
     items(lang: en, types:[armor,rig]) {
         name
         properties{
@@ -47,4 +47,20 @@ const query = gql`{
     }
 }`;
 
-request('https://api.tarkov.dev/graphql', query).then((data) => console.log(data))
+const queryArmorPlate = gql`{
+    items(lang: en, type:armorPlate) {
+        name
+        properties{
+        ...on ItemPropertiesArmorAttachment{
+          durability
+          class
+          material {
+            id
+          }
+          zones
+        }
+      }
+    }
+}`;
+
+graphql_req.request(apiUrl, queryArmorRig).then((data) => console.log(data));
