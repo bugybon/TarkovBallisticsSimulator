@@ -84,12 +84,32 @@
         function createButtons() {
             options.forEach((option, index) => {
                 const button = document.createElement('button');
+
                 button.textContent = option;
-                button.onclick = () => alert(`${option} clicked!`);
+                button.onclick = () => sendGetRequest(option);
+
                 dropdownContent.appendChild(button);
             });
         }
 
+        async function sendGetRequest(armorName) {
+            const url = `http://localhost:8080/armor?name=${encodeURIComponent(armorName)}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                } else {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+            } catch (error) {
+                console.error("Error fetching armor data:", error);
+            }
+        }
         // Call function to generate buttons
         createButtons();
 
@@ -105,6 +125,7 @@
             });
         }
     </script>
+
     <script type="importmap">
         {
             "imports": {
@@ -116,7 +137,7 @@
         }
     </script>
     <script type="module" src="/graphics.js" async defer></script>
-    <script type="module" src="/itemQuery.js" async defer></script>
+    <!-- <script type="module" src="/itemQuery.js" async defer></script> -->
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
