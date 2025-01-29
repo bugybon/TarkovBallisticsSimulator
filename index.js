@@ -181,17 +181,37 @@ const armorData = [
   } 
 ];
 
+// const Armor = require('./models/armor'); // Mongo model
+
+// async function findArmorAsync(armorName) {
+//     return await Armor.findOne({ name: armorName }).exec();
+// }
+
+function findArmorAsync(armorName) {
+  return new Promise((resolve) => {
+      setTimeout(() => { 
+          const armor = armorData.find(a => a.name.toLowerCase() === armorName.toLowerCase());
+          resolve(armor);
+      }, 50); 
+  });
+}
+
 io.on("connection", (socket) => {
-  console.log(socket.id);
+    console.log(socket.id);
 
-    socket.on('requestArmorData', (armorName) => {
-        const armor = armorData.find(a => a.name.toLowerCase() === armorName.toLowerCase());
+    socket.on('requestArmorData', async(armorName) => {
+        try {
+          const armor = await findArmorAsync(armorName); 
 
-        if (armor) {
-            socket.emit('recieveArmorData', armor);
-        } else {
-            socket.emit('recieveArmorDataError', { error: "Armor not found" });
-        }
+          if (armor) {
+              socket.emit('recieveArmorData', armor);
+          } else {
+              socket.emit('recieveArmorDataError', { error: "Armor not found" });
+          }
+      } catch (error) {
+          console.error("Error fetching armor data:", error);
+          socket.emit('recieveArmorDataError', { error: "Server error" });
+      }
     });
 
     socket.on('disconnect', () => {
