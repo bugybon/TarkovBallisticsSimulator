@@ -112,9 +112,26 @@
             });
         }
 
+        function extractPlates(armorData, plateNameId) {
+            const slot = armorData.properties.armorSlots.find(slot => slot.nameId === plateNameId);
+
+            const plateNames = [];
+            if (slot && slot.allowedPlates) {
+                for (let plate of slot.allowedPlates) {
+                    plateNames.push(plate.name);
+                }
+            } 
+
+            return plateNames;
+        }
+
         socket.on('recieveArmorData', (data) => {
             console.log("Received armor data:", data);
-            alert(`Received data: ${JSON.stringify(data)}`);
+
+            const frontPlates = extractPlates(data, "Front_plate");
+            const backPlates = extractPlates(data, "Back_plate");
+            const leftPlates = extractPlates(data, "Left_side_plate");
+            const rightPlates = extractPlates(data, "Right_side_plate");
         });
 
         socket.on('recieveArmorDataError', (error) => {
