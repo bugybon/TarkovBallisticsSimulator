@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 
 const armorData = [
   {
-    "name": "Crye Precision AVS plate carrier (Ranger Green)",
+    "name": "NFM THOR Concealable Reinforced Vest body armor",
     "properties": {
       "armorSlots": [
         {
@@ -56,13 +56,13 @@ const armorData = [
               "name": "Global Armor’s Steel ballistic plate"
             },
             {
-              "name": "Kiba Arms Steel ballistic plate"
-            },
-            {
               "name": "KITECO SC-IV SA ballistic plate"
             },
             {
               "name": "Kiba Arms Titan ballistic plate"
+            },
+            {
+              "name": "Kiba Arms Steel ballistic plate"
             },
             {
               "name": "Monoclete level III PE ballistic plate"
@@ -74,10 +74,10 @@ const armorData = [
               "name": "NewSphereTech level III ballistic plate"
             },
             {
-              "name": "SPRTN Elaphros ballistic plate"
+              "name": "PRTCTR Lightweight ballistic plate"
             },
             {
-              "name": "PRTCTR Lightweight ballistic plate"
+              "name": "SPRTN Elaphros ballistic plate"
             },
             {
               "name": "SPRTN Omega ballistic plate"
@@ -90,6 +90,12 @@ const armorData = [
             },
             {
               "name": "ESAPI level IV ballistic plate"
+            },
+            {
+              "name": "Granit Br4 ballistic plate"
+            },
+            {
+              "name": "Granit Br5 ballistic plate"
             }
           ]
         },
@@ -121,22 +127,22 @@ const armorData = [
               "name": "Kiba Arms Steel ballistic plate"
             },
             {
-              "name": "Monoclete level III PE ballistic plate"
-            },
-            {
               "name": "Kiba Arms Titan ballistic plate"
             },
             {
+              "name": "Monoclete level III PE ballistic plate"
+            },
+            {
               "name": "NESCO 4400-SA-MC ballistic plate"
+            },
+            {
+              "name": "NewSphereTech level III ballistic plate"
             },
             {
               "name": "PRTCTR Lightweight ballistic plate"
             },
             {
               "name": "SPRTN Elaphros ballistic plate"
-            },
-            {
-              "name": "NewSphereTech level III ballistic plate"
             },
             {
               "name": "SPRTN Omega ballistic plate"
@@ -149,36 +155,82 @@ const armorData = [
             },
             {
               "name": "ESAPI level IV ballistic plate"
+            },
+            {
+              "name": "Granit Br4 ballistic plate"
+            },
+            {
+              "name": "Granit Br5 ballistic plate"
+            }
+          ]
+        },
+        {
+          "nameId": "Left_side_plate",
+          "allowedPlates": [
+            {
+              "name": "SSAPI level III+ ballistic plate (Side)"
+            },
+            {
+              "name": "ESBI level IV ballistic plate (Side)"
+            },
+            {
+              "name": "Granit ballistic plate (Side)"
+            }
+          ]
+        },
+        {
+          "nameId": "Right_side_plate",
+          "allowedPlates": [
+            {
+              "name": "SSAPI level III+ ballistic plate (Side)"
+            },
+            {
+              "name": "ESBI level IV ballistic plate (Side)"
+            },
+            {
+              "name": "Granit ballistic plate (Side)"
             }
           ]
         },
         {
           "nameId": "Soft_armor_front",
           "class": 3,
-          "durability": 42,
+          "durability": 25,
           "material": {
-            "id": "Aramid"
+            "name": "Aramid",
+            "destructibility": 0.1875
           }
         },
         {
           "nameId": "Soft_armor_back",
           "class": 3,
-          "durability": 42,
+          "durability": 25,
           "material": {
-            "id": "Aramid"
+            "name": "Aramid",
+            "destructibility": 0.1875
           }
         },
         {
-          "nameId": "Groin",
+          "nameId": "Soft_armor_left",
           "class": 3,
-          "durability": 28,
+          "durability": 10,
           "material": {
-            "id": "Aramid"
+            "name": "Aramid",
+            "destructibility": 0.1875
+          }
+        },
+        {
+          "nameId": "soft_armor_right",
+          "class": 3,
+          "durability": 10,
+          "material": {
+            "name": "Aramid",
+            "destructibility": 0.1875
           }
         }
       ]
     }
-  } 
+  }
 ];
 
 // const Armor = require('./models/armor'); // Mongo model
