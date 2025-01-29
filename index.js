@@ -1,14 +1,19 @@
 const express = require('express');
+const app = express();
 const path = require('path');
 const api = require('./api');
-
-const app = express();
-
 const cors = require('cors');
-app.use(cors());
+
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/pages'));
+app.use(cors());
 app.use(express.static('node_modules'));
 app.use(express.static('static'));
 
@@ -176,23 +181,24 @@ const armorData = [
   } 
 ];
 
-app.get('/armor', (req, res) => {
-  const armorName = req.query.name;
+io.on("connection", (socket) => {
+  console.log(socket.id);
 
-  if (!armorName) {
-      return res.status(400).json({ error: "Armor name is required" });
-  }
+    socket.on('requestArmorData', (armorName) => {
+        const armor = armorData.find(a => a.name.toLowerCase() === armorName.toLowerCase());
 
-  const armor = armorData.find(a => a.name.toLowerCase() === armorName.toLowerCase());
+        if (armor) {
+            socket.emit('recieveArmorData', armor);
+        } else {
+            socket.emit('recieveArmorDataError', { error: "Armor not found" });
+        }
+    });
 
-  if (!armor) {
-      return res.status(404).json({ error: "Armor not found" });
-  }
-
-  res.json(armor);
-});
-
-app.listen(8080, function () {
-  console.log('Server is listening on http//localhost:8080');
-  //api.itemQuery.getArmorRig().then((data) => console.log(data));
+    socket.on('disconnect', () => {
+      console.log('User disconnected:', socket.id);
+    });
 })
+
+server.listen(3000, () => {
+  console.log('Server is listening on http://localhost:3000');
+});
