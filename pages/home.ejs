@@ -29,7 +29,6 @@
         <button class="dropbtn">Armor</button>
         <div class="armorDropdown-content">
             <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions()">
-
         </div>
     </div>
     
@@ -98,7 +97,7 @@
 
         const dropdownContent = document.querySelector('.armorDropdown-content');
 
-        function createButtons() {
+        function createArmorDropDown() {
             options.forEach((option, index) => {
                 const button = document.createElement('button');
 
@@ -139,7 +138,7 @@
             alert("Armor not found.");
         });
 
-        createButtons();
+        createArmorDropDown();
 
         function filterOptions() {
             const input = document.querySelector('.search-input');
