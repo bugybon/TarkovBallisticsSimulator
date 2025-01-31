@@ -233,6 +233,10 @@ const armorData = [
   }
 ];
 
+const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
+  return data.items;
+});
+
 // const Armor = require('./models/armor'); // Mongo model
 
 // async function findArmorAsync(armorName) {
@@ -242,7 +246,8 @@ const armorData = [
 function findArmorAsync(armorName) {
   return new Promise((resolve) => {
       setTimeout(() => { 
-          const armor = armorData.find(a => a.name.toLowerCase() === armorName.toLowerCase());
+          armorDataBD.then((data)=>{console.log(data)});
+          const armor = armorDataBD.then((data) => {return data.find(a => a.name.toLowerCase() === armorName.toLowerCase())});
           resolve(armor);
       }, 50); 
   });
