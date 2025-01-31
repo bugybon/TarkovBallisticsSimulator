@@ -74,3 +74,23 @@ canvas{
     padding: 5px;
     font-size: 14px;
 }
+
+#armor-selection {
+    position: absolute;
+    top: 300px; 
+    left: 5.5%;
+    transform: translateX(-50%);
+}
+
+.plate-container {
+    margin-bottom: 10px; 
+}
+
+#armorName {
+    font-size: 16px;
+}
+
+#armorImage {
+    width: 225px;  /* Set the width of the image */
+    height: auto;  /* Maintain aspect ratio */
+}

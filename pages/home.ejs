@@ -30,7 +30,11 @@
         <div class="armorDropdown-content">
             <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions()">
         </div>
+        <h1 id="armorName">Armor name</h1>
+        <img id="armorImage" src="your-image.png">
     </div>
+
+    <div id="armor-selection"></div>
     
     <script>
         const options = [
@@ -103,6 +107,9 @@
         const dropdownContent = document.querySelector('.armorDropdown-content');
 
         function createArmorDropDown() {
+            const armorName = document.getElementById('armorName'); 
+            const armorImage = document.getElementById('armorImage'); 
+
             options.forEach((option, index) => {
                 const button = document.createElement('button');
 
@@ -110,6 +117,9 @@
                 button.onclick = () => {
                     console.log("Requesting armor:", option);
                     socket.emit('requestArmorData', option);
+
+                    armorName.textContent = option;
+                    armorImage.src = `images/${option}.png`;
                 }
 
                 dropdownContent.appendChild(button);
@@ -119,10 +129,10 @@
         function createPlateChoiceDropDown(allowedPlates, area) {
             if (!allowedPlates || allowedPlates.length === 0) return;
 
-            const existingContainer = document.getElementById(`plate-container-${area}`);
-            if (existingContainer) {
-                existingContainer.remove();
-            }
+            // const existingContainer = document.getElementById(`plate-container-${area}`);
+            // if (existingContainer) {
+            //     existingContainer.remove();
+            // }
 
             const container = document.createElement('div');
             container.classList.add('plate-container');
@@ -176,7 +186,14 @@
             container.appendChild(imgContainer);
             container.appendChild(label);
             
-            document.body.appendChild(container); 
+            const armorSelectionContainer = document.getElementById('armor-selection');
+            armorSelectionContainer.appendChild(container);
+        }
+
+        function removeAllPlateContainers() {
+            const plateContainers = document.querySelectorAll('.plate-container');
+            
+            plateContainers.forEach(container => container.remove());
         }
 
         function extractPlates(armorData, plateNameId) {
@@ -195,6 +212,8 @@
         socket.on('recieveArmorData', (data) => {
             console.log("Received armor data:", data);
 
+            removeAllPlateContainers();
+
             const frontPlates = extractPlates(data, "Front_plate");
             const backPlates = extractPlates(data, "Back_plate");
             const leftPlates = extractPlates(data, "Left_side_plate");
@@ -209,6 +228,8 @@
         socket.on('recieveArmorDataError', (error) => {
             console.error("Armor not found:", error);
             alert("Armor not found.");
+            
+            removeAllPlateContainers();
         });
 
         createArmorDropDown();
