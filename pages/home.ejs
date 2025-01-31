@@ -95,6 +95,11 @@
 
         const socket = io("http://localhost:3000");
 
+        function clearBox(elementID)
+        {
+            document.getElementById(elementID).innerHTML = "";
+        }
+        
         const dropdownContent = document.querySelector('.armorDropdown-content');
 
         function createArmorDropDown() {
@@ -109,6 +114,69 @@
 
                 dropdownContent.appendChild(button);
             });
+        }
+
+        function createPlateChoiceDropDown(allowedPlates, area) {
+            if (!allowedPlates || allowedPlates.length === 0) return;
+
+            const existingContainer = document.getElementById(`plate-container-${area}`);
+            if (existingContainer) {
+                existingContainer.remove();
+            }
+
+            const container = document.createElement('div');
+            container.classList.add('plate-container');
+            container.id = `plate-container-${area}`;
+            
+            const select = document.createElement('select');
+            select.classList.add('plate-dropdown');
+
+            const title = document.createElement('p');
+            title.textContent = `Select ${area} Plate`;
+            title.classList.add('plate-title');
+
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = `No plate`;
+            defaultOption.value = "";
+            select.appendChild(defaultOption);
+
+            allowedPlates.forEach(plate => {
+                const option = document.createElement('option');
+                option.textContent = plate;
+                option.value = plate;
+                select.appendChild(option);
+            });
+
+            const imgContainer = document.createElement('div');
+            imgContainer.classList.add('plate-image-container');
+            const img = document.createElement('img');
+            img.classList.add('plate-image');
+            img.src = `images/placeholder.png`; 
+            imgContainer.appendChild(img);
+            
+            const label = document.createElement('p');
+            label.textContent = "";
+            label.classList.add('plate-label');
+
+            // Handle selection
+            select.addEventListener('change', function () {
+                const selectedPlate = this.value;
+                if (selectedPlate) {
+                    img.src = `images/${selectedPlate}.png`; 
+                    label.textContent = selectedPlate;
+                    socket.emit('plateSelected', { area, selectedPlate });
+                } else {
+                    img.src = `images/placeholder.png`;
+                    label.textContent = "";
+                }
+            });
+
+            container.appendChild(title);
+            container.appendChild(select);
+            container.appendChild(imgContainer);
+            container.appendChild(label);
+            
+            document.body.appendChild(container); 
         }
 
         function extractPlates(armorData, plateNameId) {
@@ -131,6 +199,11 @@
             const backPlates = extractPlates(data, "Back_plate");
             const leftPlates = extractPlates(data, "Left_side_plate");
             const rightPlates = extractPlates(data, "Right_side_plate");
+
+            createPlateChoiceDropDown(frontPlates, "Front_plate");
+            createPlateChoiceDropDown(backPlates, "Back_plate");
+            createPlateChoiceDropDown(leftPlates, "Left_side_plate");
+            createPlateChoiceDropDown(rightPlates, "Right_side_plate");
         });
 
         socket.on('recieveArmorDataError', (error) => {

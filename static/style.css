@@ -61,11 +61,16 @@ canvas{
     background-color: #3e8e41;
 }
 
-/* Style for the search bar */
 .search-input {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
+}
+
+.plate-dropdown {
+    width: 200px; 
+    padding: 5px;
+    font-size: 14px;
 }
