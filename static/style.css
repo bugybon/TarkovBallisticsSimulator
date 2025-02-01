@@ -38,6 +38,22 @@ canvas{
     overflow-y: auto; /* Enables scrolling for long lists */
 }
 
+.armorDropdown-content button-armor {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.armorDropdown-content button-armor:hover {
+    background-color: #ddd;
+}
+
 .armorDropdown:hover .armorDropdown-content {
     display: block;
 }
@@ -129,54 +145,6 @@ canvas{
     z-index: 1;
     max-height: 300px;
     overflow-y: auto; /* Enables scrolling for long lists */
-}
-
-.armorDropdown-content button-armor {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 12px 16px;
-    text-align: left;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    cursor: pointer;
-}
-
-.armorDropdown-content button-armor:hover {
-    background-color: #ddd;
-}
-
-.bullDropdown-content button-bullet {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 12px 16px;
-    text-align: left;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    cursor: pointer;
-}
-
-.bullDropdown-content button-bullet:hover {
-    background-color: #ddd;
-}
-
-.bulletDropdown-content button-bullet {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 12px 16px;
-    text-align: left;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    cursor: pointer;
-}
-
-.armorDropdown-content button-bullet:hover {
-    background-color: #ddd;
 }
 
 .bullDropdown-content button-bullet {
