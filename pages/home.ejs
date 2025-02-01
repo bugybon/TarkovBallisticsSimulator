@@ -34,7 +34,9 @@
         <img id="armorImage" src="your-image.png">
     </div>
 
-    <div id="armor-selection"></div>
+    <div id="plate-selection"></div>
+
+    <div id="soft-armors"></div>
     
     <script>
         const options = [
@@ -129,11 +131,6 @@
         function createPlateChoiceDropDown(allowedPlates, area) {
             if (!allowedPlates || allowedPlates.length === 0) return;
 
-            // const existingContainer = document.getElementById(`plate-container-${area}`);
-            // if (existingContainer) {
-            //     existingContainer.remove();
-            // }
-
             const container = document.createElement('div');
             container.classList.add('plate-container');
             container.id = `plate-container-${area}`;
@@ -168,13 +165,12 @@
             label.textContent = "";
             label.classList.add('plate-label');
 
-            // Handle selection
             select.addEventListener('change', function () {
                 const selectedPlate = this.value;
                 if (selectedPlate) {
                     img.src = `images/${selectedPlate}.png`; 
                     label.textContent = selectedPlate;
-                    socket.emit('plateSelected', { area, selectedPlate });
+                    socket.emit('plateSelected', { selectedPlate });
                 } else {
                     img.src = `images/placeholder.png`;
                     label.textContent = "";
@@ -186,7 +182,7 @@
             container.appendChild(imgContainer);
             container.appendChild(label);
             
-            const armorSelectionContainer = document.getElementById('armor-selection');
+            const armorSelectionContainer = document.getElementById('plate-selection');
             armorSelectionContainer.appendChild(container);
         }
 
@@ -209,6 +205,81 @@
             return plateNames;
         }
 
+        function extractSoftArmor(data){
+            const excludedSlots = ["Front_plate", "Back_plate", "Left_side_plate", "Right_side_plate"];
+            const softArmors = [];
+
+            data.properties.armorSlots.forEach(slot => {
+                if(!excludedSlots.includes(slot.nameId)){
+                    if(!slot.material.name)
+                    {
+                        softArmors.push({
+                            nameID: slot.nameId,
+                            class: slot.class,
+                            durability: slot.durability,
+                            material: "aramid"
+                        });
+                    } else {
+                        softArmors.push({
+                        nameID: slot.nameId,
+                        class: slot.class,
+                        durability: slot.durability,
+                        material: slot.material.name
+                    });
+                    }
+                }
+            });
+
+            return softArmors;
+        }
+
+        function createSoftArmor(armors) {
+            const softArmorContainer = document.getElementById('soft-armors');
+            softArmorContainer.innerHTML = "";
+
+            armors.forEach(armor => {
+                const container = document.createElement('div');
+                container.classList.add('soft-armor-container');
+                container.id = `soft-armor-${armor.nameID}`;
+
+                const imgContainer = document.createElement('div');
+                imgContainer.classList.add('soft-armor-image-container');
+                
+                const area = JSON.stringify(armor.nameId);
+                const img = document.createElement('img');
+                img.classList.add('soft-armor-image');
+                img.src = `images/${armor.nameID.replace(/\s+/g, '_')}.png`
+                img.alt = armor.nameID;
+                imgContainer.appendChild(img);
+
+                const infoContainer = document.createElement('div');
+                infoContainer.classList.add('soft-armor-info');
+
+                const nameLabel = document.createElement('p');
+                nameLabel.textContent = `Area: ${armor.nameID}`;
+                nameLabel.classList.add('soft-armor-label');
+                
+                const classLabel = document.createElement('p');
+                classLabel.textContent = `Class: ${armor.class}`;
+                
+                const durabilityLabel = document.createElement('p');
+                durabilityLabel.textContent = `Durability:${armor.durability} / ${armor.durability}`;
+                
+                const materialLabel = document.createElement('p');
+                materialLabel.textContent = `Material: ${armor.material}`;
+                
+                infoContainer.appendChild(nameLabel);
+                infoContainer.appendChild(classLabel);
+                infoContainer.appendChild(durabilityLabel);
+                infoContainer.appendChild(materialLabel);
+                
+                container.appendChild(infoContainer);
+                container.appendChild(imgContainer);
+                
+                softArmorContainer.appendChild(container);
+            });
+        }
+        
         socket.on('recieveArmorData', (data) => {
             console.log("Received armor data:", data);
 
@@ -223,6 +294,10 @@
             createPlateChoiceDropDown(backPlates, "Back_plate");
             createPlateChoiceDropDown(leftPlates, "Left_side_plate");
             createPlateChoiceDropDown(rightPlates, "Right_side_plate");
+
+            const softArmors = extractSoftArmor(data);
+            if (!(softArmors.length === 0))
+            createSoftArmor(softArmors);
         });
 
         socket.on('recieveArmorDataError', (error) => {

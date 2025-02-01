@@ -76,10 +76,14 @@ canvas{
     font-size: 14px;
 }
 
-#armor-selection {
+#plate-selection {
     position: absolute;
-    top: 300px; 
-    
+    top: 300px;   
+}
+
+#soft-armors {
+    position: absolute;
+    top: 900px;   
 }
 
 .plate-container {
