@@ -78,16 +78,34 @@ canvas{
 
 #plate-selection {
     position: absolute;
-    top: 300px;   
+    top: 320px;   
+}
+
+.soft-armor-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px; 
+}
+
+.plate-container {
+    /* display: flex; */
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px; 
 }
 
 #soft-armors {
     position: absolute;
-    top: 900px;   
-}
-
-.plate-container {
-    margin-bottom: 10px; 
+    float: right;
+    top: 320px; 
+    left: 300px;
 }
 
 #armorName {
@@ -96,8 +114,8 @@ canvas{
 }
 
 #armorImage {
-    width: 200px;  /* Set the width of the image */
-    height: auto;  /* Maintain aspect ratio */
+    width: 200px;  
+    height: auto;  
 }
 
 #plate-label{
