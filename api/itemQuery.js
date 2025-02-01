@@ -61,6 +61,25 @@ const queryArmorPlate = graphql_req.gql`{
     }
 }`;
 
+const queryBullet = graphql_req.gql`{
+    ammo(lang: en) {
+        item{
+          name
+        }
+        caliber
+        damage
+        armorDamage
+        projectileCount
+        fragmentationChance
+        ricochetChance
+        penetrationPower
+        penetrationChance
+        penetrationPowerDeviation
+        lightBleedModifier
+        heavyBleedModifier
+    }
+}`;
+
 async function getArmorRig(){
     return new Promise((res,rej) => {
         let content = graphql_req.request(apiUrl, queryArmorRig);
@@ -75,4 +94,11 @@ async function getArmorPlate(){
     });
 }
 
-module.exports= {getArmorRig, getArmorPlate};
+async function getBullet(){
+    return new Promise(async (res,rej) => {
+        let content = await graphql_req.request(apiUrl, queryBullet);
+        res(content);
+    });
+}
+
+module.exports= {getArmorRig, getArmorPlate, getBullet};
