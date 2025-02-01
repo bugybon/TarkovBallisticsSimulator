@@ -43,6 +43,16 @@ async function armorDataBDFunc(){
   });
 };
 
+async function bulletBDFunc(){
+  return new Promise((res,rej) => {
+    let items = api.itemQuery.getBullet().then((data) =>{
+      console.log(data.items);
+      return data.items;
+    });
+    res(items);
+  });
+};
+
 const armorPlateDataDB = api.itemQuery.getArmorPlate().then((data) =>{
   //console.log(data.items);
   return data.items;
@@ -111,6 +121,52 @@ io.on("connection", (socket) => {
       } catch (error) {
         console.error("Error fetching armor data:", error);
         socket.emit('recievePlateDataError', { error: "Server error" });
+      }
+    });
+
+    socket.on('requestBullets', async () =>{
+      try {
+        let names = await api.itemQuery.getBullet();
+        names = names.ammo;
+        names = names.sort((a,b) => {
+            if (a.caliber === b.caliber){
+              return a.item.name > b.item.name ? 1 : -1;
+            };
+            return a.caliber > b.caliber ? 1 : -1;
+        });
+        console.log(names);
+        
+        if(names){
+          socket.emit('recieveBullets', names);
+        }else{
+          socket.emit('recieveBulletsError',{error: "Bullets couldn't be generated"});
+        }
+      }catch(error){
+        console.error("Error fetching armor data:", error);
+        socket.emit('recieveBulletsError', { error: "Server error" });
+      }
+    });
+
+    socket.on('requestBulletNames', async () =>{
+      try {
+        let names = await api.itemQuery.getBullet();
+        names = names.ammo;
+        names = names.sort((a,b) => {
+          if (a.caliber === b.caliber){
+            return a.item.name > b.item.name ? 1 : -1;
+          };
+          return a.caliber > b.caliber ? 1 : -1;
+        }).map((item) => [item.caliber, item.item.name]);
+        console.log(names);
+        
+        if(names){
+          socket.emit('recieveBulletNames', names);
+        }else{
+          socket.emit('recieveBulletNamesError',{error: "BulletNames couldn't be generated"});
+        }
+      }catch(error){
+        console.error("Error fetching armor data:", error);
+        socket.emit('recieveBulletNamesError', { error: "Server error" });
       }
     });
 
