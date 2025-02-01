@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
 
     socket.on('requestArmorNames', async () => {
       try {
-        let names = await armorDataBD();
+        let names = await armorDataBDFunc();
         // .then((data) =>{
         //   return data.map((item) => item['name']);
         // });
