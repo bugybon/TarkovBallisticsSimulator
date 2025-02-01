@@ -66,9 +66,11 @@ io.on("connection", (socket) => {
     socket.on('requestArmorNames', async () => {
       try {
         let names = await armorDataBDFunc();
-        // .then((data) =>{
-        //   return data.map((item) => item['name']);
-        // });
+        names = names.filter((item) => 
+          item.properties.armorSlots !== null
+        ).map((item) =>
+          item.name
+        );
         console.log(names);
         
         if(names){
