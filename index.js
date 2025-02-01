@@ -34,16 +34,16 @@ const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
 });
 
 const armorPlateDataDB = api.itemQuery.getArmorPlate().then((data) =>{
-  console.log(data.items);
+  //console.log(data.items);
   return data.items;
 });
 
-function findArmorAsync(armorName) {
+function findItemAsync(itemName,location) {
   return new Promise((resolve) => {
       setTimeout(() => { 
           //armorDataBD.then((data)=>{console.log(data)});
-          const armor = armorDataBD.then((data) => {
-            return data.find(a => a.name.toLowerCase() === armorName.toLowerCase())
+          const armor = location.then((data) => {
+            return data.find(a => a.name.toLowerCase() === itemName.toLowerCase())
           });
           resolve(armor);
       }, 50); 
@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
 
     socket.on('requestArmorData', async(armorName) => {
         try {
-          const armor = await findArmorAsync(armorName); 
+          const armor = await findItemAsync(armorName,armorDataBD); 
 
           if (armor) {
               socket.emit('recieveArmorData', armor);
@@ -65,6 +65,21 @@ io.on("connection", (socket) => {
       } catch (error) {
           console.error("Error fetching armor data:", error);
           socket.emit('recieveArmorDataError', { error: "Server error" });
+      }
+    });
+
+    socket.on('plateSelected', async(plateName) => {
+      try {
+        const plate = await findItemAsync(plateName,armorPlateDataDB); 
+
+        if (plate) {
+            socket.emit('recievePlateData', plate);
+        } else {
+            socket.emit('recievePlateDataError', { error: "Plate not found" });
+        }
+      } catch (error) {
+        console.error("Error fetching armor data:", error);
+        socket.emit('recievePlateDataError', { error: "Server error" });
       }
     });
 
