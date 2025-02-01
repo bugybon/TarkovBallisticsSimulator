@@ -100,6 +100,7 @@
         ];
 
         const socket = io("http://localhost:3000");
+        socket.emit('requestArmorNames');
 
         function clearBox(elementID)
         {
@@ -108,9 +109,14 @@
         
         const dropdownContent = document.querySelector('.armorDropdown-content');
 
-        function createArmorDropDown() {
+        socket.on('recieveArmorNames', (names) => {
+            console.log("Received armor names:", names);
+
             const armorName = document.getElementById('armorName'); 
             const armorImage = document.getElementById('armorImage'); 
+
+            const options = names.map((item) => item['name']);
+            // console.log(options);
 
             options.forEach((option, index) => {
                 const button = document.createElement('button');
@@ -126,7 +132,7 @@
 
                 dropdownContent.appendChild(button);
             });
-        }
+        });
 
         function createPlateChoiceDropDown(allowedPlates, area) {
             if (!allowedPlates || allowedPlates.length === 0) return;
@@ -308,8 +314,6 @@
             
             removeAllPlateContainers();
         });
-
-        createArmorDropDown();
 
         function filterOptions() {
             const input = document.querySelector('.search-input');
