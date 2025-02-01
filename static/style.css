@@ -147,7 +147,7 @@ canvas{
     background-color: #ddd;
 }
 
-.bullDropdown-content button-armor {
+.bullDropdown-content button-bullet {
     background-color: white;
     color: black;
     border: none;
@@ -159,7 +159,39 @@ canvas{
     cursor: pointer;
 }
 
-.bullDropdown-content button-armor:hover {
+.bullDropdown-content button-bullet:hover {
+    background-color: #ddd;
+}
+
+.bulletDropdown-content button-bullet {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.armorDropdown-content button-bullet:hover {
+    background-color: #ddd;
+}
+
+.bullDropdown-content button-bullet {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.bullDropdown-content button-bullet:hover {
     background-color: #ddd;
 }
 
