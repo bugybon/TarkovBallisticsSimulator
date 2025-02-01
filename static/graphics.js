@@ -23,6 +23,7 @@ const assets = [
     'body_allHitboxes',
 ];
 
+const socket = io("http://localhost:3000");
 
 init();
 
@@ -157,12 +158,17 @@ window.addEventListener('click', (event) => {
     const hitbox = scene.children.filter((group) => group.name == "hitbox");
     const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
     //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
+
+    const trueIntersects = [];
     for (let i = 0; i < intersects.length; i++){
         const clickedObject = intersects[i].object;
         if(clickedObject.name.toLowerCase().includes("hitbox")){
             console.log('Clicked object:', clickedObject.name, clickedObject);
+            trueIntersects.push(clickedObject.name);
         }
     }
+
+    socket.emit('sendHitAreas', trueIntersects);
 });
 
 function animate() {
