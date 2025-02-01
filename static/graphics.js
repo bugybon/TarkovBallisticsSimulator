@@ -86,14 +86,14 @@ function init() {
     stats = new Stats();
     //container.appendChild( stats.dom );
 
-    const gui = new GUI();
-    gui.add( params, 'asset', assets ).onChange( function ( value ) {
+    //const gui = new GUI();
+    // gui.add( params, 'asset', assets ).onChange( function ( value ) {
 
-        loadAsset( value );
+    //     loadAsset( value );
 
-    } );
+    // } );
 
-    guiMorphsFolder = gui.addFolder( 'Morphs' ).hide();
+    //guiMorphsFolder = gui.addFolder( 'Morphs' ).hide();
 
 }
 

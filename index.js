@@ -124,16 +124,17 @@ io.on("connection", (socket) => {
       }
     });
 
-    socket.on('requestBullets', async () =>{
+    socket.on('requestBullets', async (bullet) =>{
       try {
-        let names = await api.itemQuery.getBullet();
-        names = names.ammo;
-        names = names.sort((a,b) => {
-            if (a.caliber === b.caliber){
-              return a.item.name > b.item.name ? 1 : -1;
-            };
-            return a.caliber > b.caliber ? 1 : -1;
-        });
+        let location = api.itemQuery.getBullet();
+        let names = await findItemAsync(bullet, location.ammo);
+        // names = names.ammo;
+        // names = names.sort((a,b) => {
+        //     if (a.caliber === b.caliber){
+        //       return a.item.name > b.item.name ? 1 : -1;
+        //     };
+        //     return a.caliber > b.caliber ? 1 : -1;
+        // });
         console.log(names);
         
         if(names){

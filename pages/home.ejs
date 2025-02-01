@@ -28,29 +28,42 @@
     <div class="armorDropdown">
         <button class="dropbtn">Armor</button>
         <div class="armorDropdown-content">
-            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions()">
+            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.armorDropdown-content')">
         </div>
-        <h1 id="armorName">Armor name</h1>
-        <img id="armorImage" src="your-image.png">
+        <h1 id="armorName"></h1>
+        <img id="armorImage" src="armor.png"> 
     </div>
 
     <div id="plate-selection"></div>
 
     <div id="soft-armors"></div>
+
+    <div class="bulletsDropdown">
+        <button class="dropbtn">Bullets</button>
+        <div class="bullDropdown-content">
+            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, 'bullDropdown-content')">
+        </div>
+        <h1 id="bulletName"></h1>
+        <img id="bulletImage" src="bullet.png"> 
+    </div>
     
     <script>
 
         const socket = io("http://localhost:3000");
         socket.emit('requestArmorNames');
+        socket.emit('requestBulletNames');
 
         function clearBox(elementID)
         {
             document.getElementById(elementID).innerHTML = "";
         }
         
-        const dropdownContent = document.querySelector('.armorDropdown-content');
+        // const dropdownContent = document.querySelector('.armorDropdown-content');
 
         socket.on('recieveArmorNames', (names) => {
+
+            const dropdownContent = document.querySelector('.armorDropdown-content');
+
             console.log("Received armor names:", names);
 
             const armorName = document.getElementById('armorName'); 
@@ -69,6 +82,34 @@
 
                     armorName.textContent = option;
                     armorImage.src = `images/${option}.png`;
+                }
+
+                dropdownContent.appendChild(button);
+            });
+        });
+
+        socket.on('recieveBulletNames', (names) => {
+
+            const dropdownContent = document.querySelector('.bullDropdown-content');
+
+            console.log("Received bullet names:", names);
+
+            const bulletName = document.getElementById('bulletName'); 
+            const bulletImage = document.getElementById('bulletImage'); 
+
+            const options = names;//.map((item) => item['name']);
+            // console.log(options);
+
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+
+                button.textContent = option;
+                button.onclick = () => {
+                    console.log("Requesting bullets:", option);
+                    socket.emit('requestBullets', option);
+
+                    bulletName.textContent = option;
+                    bulletImage.src = `images/${option}.png`;
                 }
 
                 dropdownContent.appendChild(button);
@@ -282,9 +323,10 @@
             removeAllPlateContainers();
         });
 
-        function filterOptions() {
-            const input = document.querySelector('.search-input');
-            const filter = input.value.toLowerCase();
+        function filterOptions(inputElement, dropdownSelector) {
+            const dropdownContent = document.querySelector(dropdownSelector);
+
+            const filter = inputElement.value.toLowerCase();
             const buttons = dropdownContent.querySelectorAll('button');
 
             buttons.forEach(button => {
