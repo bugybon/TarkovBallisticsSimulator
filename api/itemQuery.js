@@ -56,7 +56,6 @@ const queryArmorPlate = graphql_req.gql`{
           material {
             id
           }
-          zones
         }
       }
     }
