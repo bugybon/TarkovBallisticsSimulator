@@ -106,7 +106,7 @@
                 button.textContent = option;
                 button.onclick = () => {
                     console.log("Requesting bullets:", option);
-                    //socket.emit('requestBullets', option);
+                    socket.emit('requestBullets', option[1]);
 
                     bulletName.textContent = option;
                     bulletImage.src = `images/${option}.png`;

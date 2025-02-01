@@ -125,9 +125,12 @@ io.on("connection", (socket) => {
     });
 
     socket.on('requestBullets', async (bullet) =>{
+      console.log(bullet);
       try {
-        let location = api.itemQuery.getBullet();
-        let names = await findItemAsync(bullet, location.ammo);
+        let location = await api.itemQuery.getBullet();
+        location = location.ammo;
+        console.log(location);
+        let names = location.find(a => a.item.name.toLowerCase() === bullet.toLowerCase());
         // names = names.ammo;
         // names = names.sort((a,b) => {
         //     if (a.caliber === b.caliber){
