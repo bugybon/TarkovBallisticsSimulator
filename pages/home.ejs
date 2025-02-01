@@ -41,7 +41,7 @@
     <div class="bulletsDropdown">
         <button class="dropbtn">Bullets</button>
         <div class="bullDropdown-content">
-            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, 'bullDropdown-content', 'button-bullet')">
+            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.bullDropdown-content', 'button-bullet')">
         </div>
         <h1 id="bulletName"></h1>
         <img id="bulletImage" src="bullet.png"> 
@@ -57,8 +57,6 @@
         {
             document.getElementById(elementID).innerHTML = "";
         }
-        
-        // const dropdownContent = document.querySelector('.armorDropdown-content');
 
         socket.on('recieveArmorNames', (names) => {
 
@@ -106,7 +104,7 @@
                 button.textContent = option;
                 button.onclick = () => {
                     console.log("Requesting bullets:", option);
-                    //socket.emit('requestBullets', option);
+                    socket.emit('requestBullets', option);
 
                     bulletName.textContent = option;
                     bulletImage.src = `images/${option}.png`;
