@@ -33,6 +33,16 @@ const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
   return data.items;
 });
 
+async function armorDataBDFunc(){
+  return new Promise((res,rej) => {
+    let items = api.itemQuery.getArmorRig().then((data) =>{
+      console.log(data.items);
+      return data.items;
+    });
+    res(items);
+  });
+};
+
 const armorPlateDataDB = api.itemQuery.getArmorPlate().then((data) =>{
   //console.log(data.items);
   return data.items;
@@ -52,6 +62,25 @@ function findItemAsync(itemName,location) {
 
 io.on("connection", (socket) => {
     console.log(socket.id);
+
+    socket.on('requestArmorNames', async () => {
+      try {
+        let names = await armorDataBD();
+        // .then((data) =>{
+        //   return data.map((item) => item['name']);
+        // });
+        console.log(names);
+        
+        if(names){
+          socket.emit('recieveArmorNames', names);
+        }else{
+          socket.emit('recieveArmorNamesError',{error: "Names couldn't be generated"});
+        }
+      }catch(error){
+        console.error("Error fetching armor data:", error);
+        socket.emit('recieveArmorNamesError', { error: "Server error" });
+      }
+    });
 
     socket.on('requestArmorData', async(armorName) => {
         try {
