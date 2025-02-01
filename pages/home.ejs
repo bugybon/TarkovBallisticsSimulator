@@ -114,10 +114,36 @@
 
             select.addEventListener('change', function () {
                 const selectedPlate = this.value;
+
                 if (selectedPlate) {
                     img.src = `images/${selectedPlate}.png`; 
                     label.textContent = selectedPlate;
-                    socket.emit('plateSelected', { selectedPlate });
+                    socket.emit('plateSelected', selectedPlate);
+
+                    const existingInfo = container.querySelector('.plate-info');
+                    if (existingInfo) existingInfo.remove();
+
+                    socket.once('recievePlateData', (plate)=>{
+                        console.log(plate);
+                        const infoContainer = document.createElement('div');
+
+                        infoContainer.classList.add('plate-info');
+                        
+                        const classLabel = document.createElement('p');
+                        classLabel.textContent = `Class: ${plate.properties.class}`;
+                        
+                        const durabilityLabel = document.createElement('p');
+                        durabilityLabel.textContent = `Durability:${plate.properties.durability} / ${plate.properties.durability}`;
+                        
+                        const materialLabel = document.createElement('p');
+                        materialLabel.textContent = `Material: ${plate.properties.material.id}`;
+                        
+                        infoContainer.appendChild(classLabel);
+                        infoContainer.appendChild(durabilityLabel);
+                        infoContainer.appendChild(materialLabel);
+                        
+                        container.appendChild(infoContainer);
+                    });
                 } else {
                     img.src = `images/placeholder.png`;
                     label.textContent = "";

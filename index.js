@@ -36,7 +36,7 @@ const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
 async function armorDataBDFunc(){
   return new Promise((res,rej) => {
     let items = api.itemQuery.getArmorRig().then((data) =>{
-      console.log(data.items);
+      //console.log(data.items);
       return data.items;
     });
     res(items);
@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
         ).map((item) =>
           item.name
         );
-        console.log(names);
+        //console.log(names);
         
         if(names){
           socket.emit('recieveArmorNames', names);
