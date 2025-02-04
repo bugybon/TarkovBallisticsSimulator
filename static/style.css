@@ -91,6 +91,12 @@ canvas{
     margin-bottom: 10px; 
 }
 
+.head_container {
+    display: flex;
+    right: 0;
+    top: 300px;
+}
+
 .plate-container {
     /* display: flex; */
     flex-direction: row;
@@ -129,6 +135,14 @@ canvas{
     width: 200px;  
     height: auto;  
     right: 0;
+}
+
+#health {
+    width: 400px;
+    height: auto;
+    position: absolute; /* Required for top/right to work */
+    right: 20px;
+    top: 200px;
 }
 
 #bulletName{
@@ -194,3 +208,4 @@ canvas{
     top: 300px;   /* Adjust the top value if necessary */
     display: inline-block;
 }
+
