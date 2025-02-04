@@ -101,6 +101,13 @@ canvas{
     margin-bottom: 10px; 
 }
 
+.bullet-container {
+    position: absolute;
+    top: 250px;   
+    right: 100px;
+}
+
+
 #soft-armors {
     position: absolute;
     float: right;
@@ -116,6 +123,17 @@ canvas{
 #armorImage {
     width: 200px;  
     height: auto;  
+}
+
+#bulletImage{
+    width: 200px;  
+    height: auto;  
+    right: 0;
+}
+
+#bulletName{
+    font-size: 16px;
+    width: 200px;
 }
 
 .plate-image {
@@ -169,4 +187,10 @@ canvas{
 
 .bulletsDropdown:hover .dropbtn {
     background-color: #3e8e41;
+}
+
+.bullet {
+    right: 0; /* Position it on the right */
+    top: 300px;   /* Adjust the top value if necessary */
+    display: inline-block;
 }

@@ -141,7 +141,7 @@ io.on("connection", (socket) => {
         console.log(names);
         
         if(names){
-          socket.emit('recieveBullets', names);
+          socket.emit('recieveBulletsData', names);
         }else{
           socket.emit('recieveBulletsError',{error: "Bullets couldn't be generated"});
         }
