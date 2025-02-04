@@ -111,7 +111,7 @@ io.on("connection", (socket) => {
         let names = location.find(a => a.item.name.toLowerCase() === bullet.toLowerCase());
         
         if(names){
-          socket.emit('recieveBullets', names);
+          socket.emit('recieveBulletsData', names);
         }else{
           socket.emit('recieveBulletsError',{error: "Bullets couldn't be generated"});
         }

@@ -46,6 +46,8 @@
         <h1 id="bulletName"></h1>
         <img id="bulletImage" src="bullet.png"> 
     </div>
+
+    <div id="bullet"></div>
     
     <script>
 
@@ -107,11 +109,56 @@
                     socket.emit('requestBullets', option[1]);
 
                     bulletName.textContent = option;
-                    bulletImage.src = `images/${option}.png`;
+                    bulletImage.src = `images/${option[1].trim().toLowerCase().replace(/[^a-z0-9]/g, "")}.png`;
                 }
-
                 dropdownContent.appendChild(button);
             });
+        });
+
+        function createBulletContainer(data){
+
+            const bulletContainer = document.getElementById('bullet');
+            bulletContainer.innerHTML = "";
+
+            const container = document.createElement('div');
+            container.classList.add('bullet-container');
+            container.id = `bullet-container`;
+
+            const damage = document.createElement('p');
+            damage.textContent = `Damage: ${data.damage}`;
+            
+            const penetration = document.createElement('p');
+            penetration.textContent = `Penetration Power: ${data.penetrationPower}`;
+            
+            const projectilesCount = document.createElement('p');
+            projectilesCount.textContent = `Projectile Count: ${data.projectileCount}`;
+            
+            container.appendChild(damage);
+            container.appendChild(penetration);
+            container.appendChild(projectilesCount);
+
+            bulletContainer.appendChild(container);
+        }
+
+        function removeBulletContainer() {
+            const bulletContainer = document.querySelector('.bullet-container');
+            if (bulletContainer) {
+                bulletContainer.remove();
+            }
+        }
+
+        socket.on('recieveBulletsData', (data) => {
+            console.log("Received bullet data:", data);
+            removeBulletContainer();
+            
+            createBulletContainer(data);
+        });
+
+        socket.on('recieveBulletsError', (error) => {
+            console.error("Bullet not found:", error);
+            alert("Bullet not found.");
+            
+            removeBulletContainer();
         });
 
         function createPlateChoiceDropDown(allowedPlates, area) {
