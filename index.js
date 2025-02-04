@@ -33,26 +33,6 @@ const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
   return data.items;
 });
 
-async function armorDataBDFunc(){
-  return new Promise((res,rej) => {
-    let items = api.itemQuery.getArmorRig().then((data) =>{
-      //console.log(data.items);
-      return data.items;
-    });
-    res(items);
-  });
-};
-
-async function bulletBDFunc(){
-  return new Promise((res,rej) => {
-    let items = api.itemQuery.getBullet().then((data) =>{
-      console.log(data.items);
-      return data.items;
-    });
-    res(items);
-  });
-};
-
 const armorPlateDataDB = api.itemQuery.getArmorPlate().then((data) =>{
   //console.log(data.items);
   return data.items;
@@ -75,13 +55,13 @@ io.on("connection", (socket) => {
 
     socket.on('requestArmorNames', async () => {
       try {
-        let names = await armorDataBDFunc();
+        let names = await api.itemQuery.getArmorRig();
+        names = names.items;
         names = names.filter((item) => 
           item.properties.armorSlots !== null
         ).map((item) =>
           item.name
         );
-        //console.log(names);
         
         if(names){
           socket.emit('recieveArmorNames', names);
@@ -119,26 +99,16 @@ io.on("connection", (socket) => {
             socket.emit('recievePlateDataError', { error: "Plate not found" });
         }
       } catch (error) {
-        console.error("Error fetching armor data:", error);
+        console.error("Error fetching plate data:", error);
         socket.emit('recievePlateDataError', { error: "Server error" });
       }
     });
 
     socket.on('requestBullets', async (bullet) =>{
-      console.log(bullet);
       try {
         let location = await api.itemQuery.getBullet();
         location = location.ammo;
-        console.log(location);
         let names = location.find(a => a.item.name.toLowerCase() === bullet.toLowerCase());
-        // names = names.ammo;
-        // names = names.sort((a,b) => {
-        //     if (a.caliber === b.caliber){
-        //       return a.item.name > b.item.name ? 1 : -1;
-        //     };
-        //     return a.caliber > b.caliber ? 1 : -1;
-        // });
-        console.log(names);
         
         if(names){
           socket.emit('recieveBullets', names);
@@ -146,7 +116,7 @@ io.on("connection", (socket) => {
           socket.emit('recieveBulletsError',{error: "Bullets couldn't be generated"});
         }
       }catch(error){
-        console.error("Error fetching armor data:", error);
+        console.error("Error fetching bullet data:", error);
         socket.emit('recieveBulletsError', { error: "Server error" });
       }
     });
@@ -161,7 +131,6 @@ io.on("connection", (socket) => {
           };
           return a.caliber > b.caliber ? 1 : -1;
         }).map((item) => [item.caliber, item.item.name]);
-        console.log(names);
         
         if(names){
           socket.emit('recieveBulletNames', names);
