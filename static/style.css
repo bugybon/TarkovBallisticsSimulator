@@ -92,9 +92,9 @@ canvas{
 }
 
 .head_container {
-    display: flex;
+    display: absolute;
     right: 0;
-    top: 300px;
+    top: 400px;
 }
 
 .plate-container {
@@ -143,6 +143,59 @@ canvas{
     position: absolute; /* Required for top/right to work */
     right: 20px;
     top: 200px;
+}
+
+#head {
+    position: absolute;
+    top: 205px;  /* Adjust as needed */
+    left: 210px; /* Adjust as needed */
+}
+
+#right_arm {
+    position: absolute;
+    top: 400px;  /* Adjust as needed */
+    left: 100px; /* Adjust as needed */
+}
+
+#left_arm {
+    position: absolute;
+    top: 400px;  /* Adjust as needed */
+    left: 310px; /* Adjust as needed */
+}
+
+#thorax {
+    position: absolute;
+    top: 315px;  /* Adjust as needed */
+    left: 210px; /* Adjust as needed */
+}
+
+#stomach {
+    position: absolute;
+    top: 425px;  /* Adjust as needed */
+    left: 210px; /* Adjust as needed */
+}
+
+#left_leg {
+    position: absolute;
+    top: 600px;  /* Adjust as needed */
+    left: 260px; /* Adjust as needed */
+}
+
+#right_leg {
+    position: absolute;
+    top: 600px;  /* Adjust as needed */
+    left: 140px; /* Adjust as needed */
+}
+
+.HP_container {
+    background-color: rgba(51, 51, 51, 0.5); /* Dark, semi-transparent background */
+    color: white; /* White text */
+    font-weight: bold; /* Bold text */
+    font-size: 20px; /* Larger text size */
+    padding: 5px 20px; /* Padding inside the box */
+    text-align: center; /* Centers the text */
+    width: fit-content; /* Box size adjusts to the text */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Optional thin, semi-transparent border */
 }
 
 #bulletName{
