@@ -265,7 +265,7 @@
         }
 
         function extractPlates(armorData, plateNameId) {
-            const slot = armorData.properties.armorSlots.find(slot => slot.nameId === plateNameId);
+            const slot = armorData.properties.armorSlots.find(slot => slot.nameId.toLowerCase() === plateNameId);
 
             const plateNames = [];
             if (slot && slot.allowedPlates) {
@@ -278,11 +278,11 @@
         }
 
         function extractSoftArmor(data){
-            const excludedSlots = ["Front_plate", "Back_plate", "Left_side_plate", "Right_side_plate"];
+            const excludedSlots = ["front_plate", "back_plate", "left_side_plate", "right_side_plate"];
             const softArmors = [];
-
+            
             data.properties.armorSlots.forEach(slot => {
-                if(!excludedSlots.includes(slot.nameId)){
+                if(!excludedSlots.includes(slot.nameId.toLowerCase())){
                     if(!slot.material.name)
                     {
                         softArmors.push({
@@ -357,18 +357,18 @@
 
             removeAllPlateContainers();
 
-            const frontPlates = extractPlates(data, "Front_plate");
-            const backPlates = extractPlates(data, "Back_plate");
-            const leftPlates = extractPlates(data, "Left_side_plate");
-            const rightPlates = extractPlates(data, "Right_side_plate");
+            const frontPlates = extractPlates(data, "front_plate");
+            const backPlates = extractPlates(data, "back_plate");
+            const leftPlates = extractPlates(data, "left_side_plate");
+            const rightPlates = extractPlates(data, "right_side_plate");
 
-            createPlateChoiceDropDown(frontPlates, "Front_plate");
-            createPlateChoiceDropDown(backPlates, "Back_plate");
-            createPlateChoiceDropDown(leftPlates, "Left_side_plate");
-            createPlateChoiceDropDown(rightPlates, "Right_side_plate");
+            createPlateChoiceDropDown(frontPlates, "front_plate");
+            createPlateChoiceDropDown(backPlates, "back_plate");
+            createPlateChoiceDropDown(leftPlates, "left_side_plate");
+            createPlateChoiceDropDown(rightPlates, "right_side_plate");
 
             const softArmors = extractSoftArmor(data);
-            if (softArmors.length !== 0)
+            if (softArmors.length != 0)
             createSoftArmor(softArmors);
         });
 
