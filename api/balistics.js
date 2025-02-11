@@ -170,3 +170,5 @@ function testSingleShot() {
 
 // Run the test
 testSingleShot();
+
+module.exports= {calculateSingleShot};
