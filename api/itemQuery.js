@@ -11,6 +11,7 @@ const queryArmorRig = graphql_req.gql`{
                         nameId
                         class
                         durability
+                        bluntThroughput
                         material{
                             name
                             destructibility
@@ -29,6 +30,7 @@ const queryArmorRig = graphql_req.gql`{
                     ...on ItemArmorSlotLocked{
                         nameId
                         class
+                      	bluntThroughput
                         durability
                         material{
                             id
@@ -53,6 +55,7 @@ const queryArmorPlate = graphql_req.gql`{
         ...on ItemPropertiesArmorAttachment{
           durability
           class
+          bluntThroughput
           material {
             id
           }
