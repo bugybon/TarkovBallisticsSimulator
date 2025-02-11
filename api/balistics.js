@@ -72,14 +72,15 @@ function calculateSingleShot(params) {
         const penChance = penetrationChance(layer.armorClass, currentPenetration, armorDurabilityPerc);
 
         const penDamage = penetrationDamage(armorDurabilityPerc, layer.armorClass, currentDamage, currentPenetration);
-        const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, layer.bluntDamageThroughput / 100, currentDamage, currentPenetration);
+        const mitigatedDamage = currentDamage - penDamage;
+        const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, (layer.bluntDamageThroughput / 100), currentDamage, currentPenetration);
 
         const avgDamage = (penDamage * penChance) + (bluntDmg * (1 - penChance));
 
         const penArmorDmg = damageToArmorPenetration(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
         const blockArmorDmg = damageToArmorBlock(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
+        
         const avgArmorDmg = (penArmorDmg * penChance) + (blockArmorDmg * (1 - penChance));
-
         const postHitDurability = Math.max(layer.durability - avgArmorDmg, 0);
 
         const reductionFactor = calculateReductionFactor(currentPenetration, armorDurabilityPerc, layer.armorClass);
@@ -89,6 +90,7 @@ function calculateSingleShot(params) {
         results.push({
             penetrationChance: penChance,
             penetrationDamage: penDamage,
+            mitigatedDamage: mitigatedDamage,
             bluntDamage: bluntDmg,
             averageDamage: avgDamage,
 
@@ -108,25 +110,25 @@ function calculateSingleShot(params) {
 function testSingleShot() {
     const AR500 = {
         isPlate: true,
-        armorClass: 3,
-        bluntDamageThroughput: 18,
-        durability: 45,
-        maxDurability: 45,
-        armorMaterial: ArmorMaterial.ARMORED_STEEL
+        armorClass: 4,
+        bluntDamageThroughput: 26,
+        durability: 40,
+        maxDurability: 40,
+        armorMaterial: ArmorMaterial.UHMWPE
     };
 
     const Kirasa = {
         isPlate: false,
-        armorClass: 2,
+        armorClass: 3,
         bluntDamageThroughput: 33,
-        durability: 56,
-        maxDurability: 56,
+        durability: 50,
+        maxDurability: 50,
         armorMaterial: ArmorMaterial.ARAMID
     };
 
     const parameters = {
         penetration: 28,
-        damage: 53,
+        damage: 56,
         armorDamagePerc: 40,
         armorLayers: [AR500, Kirasa]
     };
