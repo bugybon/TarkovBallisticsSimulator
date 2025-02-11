@@ -37,9 +37,16 @@ function penetrationChance(armorClass, bulletPen, armorDurabilityPerc) {
 }
 
 function penetrationDamage(armorDurabilityPerc, armorClass, bulletDamage, bulletPenetration) {
+    function median(a, b, c) {
+        const arr = [a, b, c].sort((x, y) => x - y);
+        return arr[1];
+    }
+
     const factorA = calculateFactorA(armorDurabilityPerc, armorClass);
-    const reduction = Math.max(0.6, bulletPenetration / (factorA + 12));
-    return reduction * bulletDamage;
+    const medianResult = median(0.6, bulletPenetration / (factorA + 12), 1);
+    const finalResult = medianResult * bulletDamage;
+
+    return finalResult;
 }
 
 function bluntDamage(armorDurabilityPerc, armorClass, bluntThroughput, bulletDamage, bulletPenetration) {
@@ -48,12 +55,28 @@ function bluntDamage(armorDurabilityPerc, armorClass, bluntThroughput, bulletDam
     return bluntThroughput * reduction * bulletDamage;
 }
 
-function damageToArmorPenetration(armorClass, material, bulletPen, armorDamagePerc, armorDurability) {
-    return Math.max(1, bulletPen * (armorDamagePerc / 100) * getDestructibility(material));
+function damageToArmorPenetration(armorClass, armorMaterial, bulletPenetration, bulletArmorDamagePercentage, armorDurability) {
+    const armorDestructibility = getDestructibility(armorMaterial);
+    const armorDamagePercentage = bulletArmorDamagePercentage / 100;
+
+    const clampedFactor = Math.min(Math.max((bulletPenetration / armorClass) * 10, 0.5, 0.9), 0.9);
+    let result = bulletPenetration * armorDamagePercentage * clampedFactor * armorDestructibility;
+
+    result = Math.max(result, 1);
+
+    return result;
 }
 
-function damageToArmorBlock(armorClass, material, bulletPen, armorDamagePerc, armorDurability) {
-    return Math.max(1, bulletPen * (armorDamagePerc / 100) * getDestructibility(material) * 0.5);
+function damageToArmorBlock(armorClass, armorMaterial, bulletPenetration, bulletArmorDamagePercentage, armorDurability) {
+    const armorDestructibility = getDestructibility(armorMaterial);
+    const armorDamagePercentage = bulletArmorDamagePercentage / 100;
+
+    const clampedFactor = Math.min(Math.max((bulletPenetration / armorClass) * 10, 0.6, 1.1), 1.1);
+    let result = bulletPenetration * armorDamagePercentage * clampedFactor * armorDestructibility;
+
+    result = Math.max(result, 1);
+
+    return result;
 }
 
 function calculateReductionFactor(penetrationPower, armorDurabilityPerc, armorClass) {
@@ -73,7 +96,14 @@ function calculateSingleShot(params) {
 
         const penDamage = penetrationDamage(armorDurabilityPerc, layer.armorClass, currentDamage, currentPenetration);
         const mitigatedDamage = currentDamage - penDamage;
-        const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, (layer.bluntDamageThroughput / 100), currentDamage, currentPenetration);
+
+        var bluntThroughput = layer.bluntDamageThroughput;
+        if (layer.isPlate)
+        {
+            bluntThroughput = bluntThroughput * 0.6;
+        }        
+
+        const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, (bluntThroughput / 100), currentDamage, currentPenetration);
 
         const avgDamage = (penDamage * penChance) + (bluntDmg * (1 - penChance));
 
