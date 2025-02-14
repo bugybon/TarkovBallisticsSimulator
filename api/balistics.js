@@ -28,6 +28,8 @@ function calculateFactorA(armorDurabilityPerc, armorClass) {
     return (121 - 5000 / (45 + (armorDurabilityPerc * 2))) * armorClass * 0.1;
 }
 
+
+
 function penetrationChance(armorClass, bulletPen, armorDurabilityPerc) {
     const factorA = calculateFactorA(armorDurabilityPerc, armorClass);
     if (armorDurabilityPerc === 0) return 1;
@@ -84,6 +86,8 @@ function calculateReductionFactor(penetrationPower, armorDurabilityPerc, armorCl
     return Math.min(Math.max(penetrationPower / (factorA + 12), 0.6), 1.0);
 }
 
+console.log(calculateReductionFactor(20, 100, 2));
+
 // Main Ballistic Calculation
 function calculateSingleShot(params) {
     const results = [];
@@ -137,4 +141,4 @@ function calculateSingleShot(params) {
     return results;
 }
 
-module.exports= {calculateSingleShot};
+module.exports= {calculateSingleShot, penetrationChance, calculateReductionFactor};
