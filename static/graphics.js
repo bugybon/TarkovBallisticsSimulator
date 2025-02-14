@@ -168,7 +168,12 @@ window.addEventListener('click', (event) => {
         }
     }
 
-    socket.emit('sendHitAreas', trueIntersects);
+    const uniqueList = trueIntersects.reduce((acc, item) => {
+        if (!acc.includes(item)) acc.push(item);
+        return acc;
+      }, []);
+
+    socket.emit('sendHitAreas', uniqueList);
 });
 
 function animate() {
