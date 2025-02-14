@@ -143,17 +143,25 @@ io.on("connection", (socket) => {
       }
     });
 
-    socket.on("sendHitAreas", (intersects) => {
-        console.log("Hit areas received:", intersects); 
+    function getBulletData(socket) {
+        return new Promise((resolve, reject) => {
+            socket.on("sendBulletData", (bulletData) => {
+                resolve(bulletData);
+            });
+        });
+    }
+  
+    socket.on("sendHitAreas", async (intersects) => {
+        console.log("Hit areas received:", intersects);
     
-        console.log("Sending request for bullet data..."); 
-        socket.emit("requestBulletData");  
-
-        
-    });
-
-    socket.on("sendBulletData", (bulletData) => {
-        console.log("Received bullet data:", bulletData);
+        socket.emit("requestBulletData");
+    
+        try {
+            const bulletData = await getBulletData(socket); // Wait for bullet data
+            console.log("Using bullet data inside sendHitAreas:", bulletData);
+        } catch (error) {
+            console.error(error.message);
+        }
     });
 
     socket.on('disconnect', () => {
