@@ -137,38 +137,37 @@ function calculateSingleShot(params) {
     return results;
 }
 
-function testSingleShot() {
-    const AR500 = {
-        isPlate: true,
-        armorClass: 4,
-        bluntDamageThroughput: 26,
-        durability: 40,
-        maxDurability: 40,
-        armorMaterial: ArmorMaterial.UHMWPE
-    };
+// function testSingleShot() {
+//     const AR500 = {
+//         isPlate: true,
+//         armorClass: 4,
+//         bluntDamageThroughput: 26,
+//         durability: 40,
+//         maxDurability: 40,
+//         armorMaterial: ArmorMaterial.UHMWPE
+//     };
 
-    const Kirasa = {
-        isPlate: false,
-        armorClass: 3,
-        bluntDamageThroughput: 33,
-        durability: 50,
-        maxDurability: 50,
-        armorMaterial: ArmorMaterial.ARAMID
-    };
+//     const Kirasa = {
+//         isPlate: false,
+//         armorClass: 3,
+//         bluntDamageThroughput: 33,
+//         durability: 50,
+//         maxDurability: 50,
+//         armorMaterial: ArmorMaterial.ARAMID
+//     };
 
-    const parameters = {
-        penetration: 28,
-        damage: 56,
-        armorDamagePerc: 40,
-        armorLayers: [AR500, Kirasa]
-    };
+//     const parameters = {
+//         penetration: 28,
+//         damage: 56,
+//         armorDamagePerc: 40,
+//         armorLayers: [AR500, Kirasa]
+//     };
 
-    const results = calculateSingleShot(parameters);
+//     const results = calculateSingleShot(parameters);
 
-    console.log("Test Results:", results);
-}
+//     console.log("Test Results:", results);
+// }
 
-// Run the test
-testSingleShot();
+// testSingleShot();
 
 module.exports= {calculateSingleShot};
