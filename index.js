@@ -150,19 +150,83 @@ io.on("connection", (socket) => {
             });
         });
     }
+
+    function getBodyHP(socket) {
+        return new Promise((resolve) => {
+            socket.on("sendBodyHP", (bodyHP) => {
+                resolve(bodyHP);
+            });
+        });
+    }
   
     socket.on("sendHitAreas", async (intersects) => {
         console.log("Hit areas received:", intersects);
-    
+      
+        let bulletData;
         socket.emit("requestBulletData");
-    
         try {
-            const bulletData = await getBulletData(socket); // Wait for bullet data
+            bulletData = await getBulletData(socket); 
             console.log("Using bullet data inside sendHitAreas:", bulletData);
         } catch (error) {
             console.error(error.message);
         }
+
+        let bodyHP;
+        io.emit("requestBodyHP"); 
+        try {
+            bodyHP = await getBodyHP(socket); 
+            console.log("Using bodyHP data inside sendHitAreas:", bodyHP);
+        } catch (error) {
+            console.error(error.message);
+        }
+
+        let currBulletDmg = bulletData.damage;
+        let currBulletPenetration = bulletData.penetration;
+        let armorDamage = bulletData.armorDamage;
+
+        function mapHitboxToPart(hitboxName) {
+            return hitboxToPartMapping[hitboxName] || "unknown"; 
+        }
+
+        for (let hitboxName of intersects) {
+          let part = mapHitboxToPart(hitboxName); // Map to a body part
+          console.log(part);
+
+          
+      }
     });
+  
+    const hitboxToPartMapping = {   
+      "ThoraxPlateArmorHitbox": "plate-container-front_plate",
+      "BackPlateArmorHitbox": "plate-container-back_plate",
+      "LeftSidePlateArmorHitbox": "plate-container-left_side_plate",
+      "RightSidePlateArmorHitbox": "plate-container-right_side_plate",
+      
+      "SoftArmorFrontHitbox": "soft-armor-Soft_armor_front",
+      "BackSoftArmorHitbox": "soft-armor-Soft_armor_back",
+      "LeftSideSoftArmorHitbox": "soft-armor-Soft_armor_left",
+      "RightSideSoftArmorHitbox": "soft-armor-Soft_armor_right",
+      "NeckSoftArmorHitbox": "soft-armor-Collar",
+      "GroinSoftArmorHitbox": "soft-armor-Groin",
+      "LeftArmSoftArmorHitbox": "soft-armor-Shoulder_l",
+      "RightArmSoftArmorHitbox": "soft-armor-Shoulder_r",
+      "ButtoxSoftArmorHitbox": "soft-armor-Groin_back",
+  
+      "EarsHeadArmorHitbox": "head",
+      "EyesHeadArmorHitbox": "head",
+      "HeadHitbox": "head",
+      "NeckHitbox": "head",
+      "LeftArmLowerHitbox": "left_arm",
+      "LeftArmUpperHitbox": "left_arm",
+      "LeftLegLowerHitbox": "left_leg",
+      "LeftLegUpperHitbox": "left_leg",
+      "RightArmLowerHitbox": "right_arm",
+      "RightArmUpperHitbox": "right_arm",
+      "RightLegLowerHitbox": "right_leg",
+      "RightLegUpperHitbox": "right_leg",
+      "StomachHitbox": "stomach",
+      "ThoraxHitbox": "thorax"
+  };
 
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
