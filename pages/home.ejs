@@ -147,6 +147,9 @@
 
             const damage = document.createElement('p');
             damage.textContent = `Damage: ${data.damage}`;
+
+            const armorDamage = document.createElement('p');
+            armorDamage.textContent = `Armor Damage: ${data.armorDamage}`;
             
             const penetration = document.createElement('p');
             penetration.textContent = `Penetration Power: ${data.penetrationPower}`;
@@ -155,6 +158,7 @@
             projectilesCount.textContent = `Projectile Count: ${data.projectileCount}`;
             
             container.appendChild(damage);
+            container.appendChild(armorDamage);
             container.appendChild(penetration);
             container.appendChild(projectilesCount);
 
@@ -414,23 +418,40 @@
         }
 
         socket.on("requestBulletData", () => {  
-
-            console.log("Backend requested bullet data");
             const bulletContainer = document.getElementById('bullet');
             const damageElement = bulletContainer.querySelector('p:nth-child(1)');
-            const penetrationElement = bulletContainer.querySelector('p:nth-child(2)');
+            const armorDamageElement = bulletContainer.querySelector('p:nth-child(2)');
+            const penetrationElement = bulletContainer.querySelector('p:nth-child(3)');
 
-            if (damageElement && penetrationElement) {
+            if (damageElement && armorDamageElement && penetrationElement) {
                 const bulletData = {
                     damage: parseInt(damageElement.textContent.split(": ")[1], 10),
+                    armorDamage: parseInt(armorDamageElement.textContent.split(": ")[1], 10),
                     penetration: parseInt(penetrationElement.textContent.split(": ")[1], 10)
                 };
 
-                console.log("Extracted bullet data:", bulletData);
+                //console.log("Extracted bullet data:", bulletData);
                 socket.emit("sendBulletData", bulletData);
             } else {
                 console.error("Bullet data elements not found in the bullet div.");
             }
+        });
+
+        function getBodyPartsHP() {
+            const hpData = {};
+            document.querySelectorAll('.HP_container').forEach(element => {
+                const bodyPart = element.id; 
+                const hpText = element.textContent.trim(); 
+                const [currentHP, maxHP] = hpText.split('/').map(Number); 
+
+                hpData[bodyPart] = { currentHP, maxHP };
+            });
+            return hpData;
+        }
+
+        socket.on("requestBodyHP", () => {
+            const bodyHP = getBodyPartsHP();     
+            socket.emit("sendBodyHP", bodyHP);
         });
 
         // socket.on('getCurrentBodyArmorConfig', () => {
