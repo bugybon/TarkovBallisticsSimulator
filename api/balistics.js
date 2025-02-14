@@ -171,24 +171,4 @@ function blackOutSpread(bodyHP, overflow, hitPart){
     return bodyHP;
 }
 
-function blackOutSpread(bodyHP, overflow, hitPart){
-    let currentMaxHP = maxHP;
-
-    bodyHP.forEach((part) =>{
-        if(part.currentHP == 0){
-            currentMaxHP -= part.maxHP;
-        }
-    });
-    
-    let damage = hitPartMultiplier[hitPart]*overflow;
-
-    bodyHP.forEach((part) =>{
-        if(part.currentHP != 0){
-            part.currentHP = Math.max(part.currentHP - Math.round(damage * part.maxHP / currentMaxHP), 0);
-        }
-    });
-
-    return bodyHP;
-}
-
 module.exports= {calculateSingleShot, penetrationChance, calculateReductionFactor,blackOutSpread};
