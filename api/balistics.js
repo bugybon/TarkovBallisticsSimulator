@@ -9,6 +9,16 @@ const ArmorMaterial = {
     GLASS: 'Glass'
 };
 
+const maxHP = 440;
+
+const hitPartMultiplier = {
+    left_arm: 0.49,
+    right_arm: 0.49,
+    left_leg: 0.7,
+    right_leg: 0.7,
+    stomach: 1.05
+}
+
 function getDestructibility(material) {
     const destructibility = {
         Aramid: 0.1875,
@@ -135,6 +145,26 @@ function calculateSingleShot(params) {
     });
 
     return results;
+}
+
+function blackOutSpread(bodyHP, overflow, hitPart){
+    let currentMaxHP = maxHP;
+
+    bodyHP.forEach((part) =>{
+        if(part.currentHP == 0){
+            currentMaxHP -= part.maxHP;
+        }
+    });
+    
+    let damage = hitPartMultiplier[hitPart]*overflow;
+
+    bodyHP.forEach((part) =>{
+        if(part.currentHP != 0){
+            part.currentHP = Math.max(part.currentHP - Math.round(damage * part.maxHP / currentMaxHP), 0);
+        }
+    });
+
+    return bodyHP;
 }
 
 module.exports= {calculateSingleShot};
