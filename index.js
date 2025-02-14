@@ -189,13 +189,26 @@ io.on("connection", (socket) => {
         }
 
         for (let hitboxName of intersects) {
-          let part = mapHitboxToPart(hitboxName); // Map to a body part
-          console.log(part);
+          let part = mapHitboxToPart(hitboxName); 
 
-          
+          if(fleshParts.includes(part)){
+            if(bodyHP[part].currentHP - currBulletDmg >= 0){
+              bodyHP[part].currentHP == bodyHP[part].currentHP - currBulletDmg;
+            } else {
+              const overflow = - (bodyHP[part].currentHP - currBulletDmg);
+              bodyHP = distrubutionBemba(bodyHP, part, overflow);
+            }
+            
+            const penChance = api.ballistics.penetrationChance(2, currBulletPenetration, (bodyHP[part].currentHP/bodyHP[part].maxHP)*100);
+            console.log("Penetration chance of the bullet for the", part,  "is", penChance);
+          }
+
+          break;
       }
     });
   
+    const fleshParts = ["head", "thorax", "left_arm", "right_arm", "stomach", "right_leg", "left_leg"];
+
     const hitboxToPartMapping = {   
       "ThoraxPlateArmorHitbox": "plate-container-front_plate",
       "BackPlateArmorHitbox": "plate-container-back_plate",
