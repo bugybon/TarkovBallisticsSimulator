@@ -262,3 +262,50 @@ canvas{
     display: inline-block;
 }
 
+.helmetDropdown {
+    position: absolute;
+    left: 0; /* Position it on the right */
+    top: 0;   /* Adjust the top value if necessary */
+    display: inline-block;
+}
+
+.helmetDropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 500px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto; /* Enables scrolling for long lists */
+}
+
+.helmetDropdown-content button-helmet {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.helmetDropdown-content button-helmet:hover {
+    background-color: #ddd;
+}
+
+.helmetsDropdown:hover .helmetDropdown-content {
+    display: block;
+}
+
+.helmetsDropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.helmet {
+    left: 0; /* Position it on the right */
+    top: 300px;   /* Adjust the top value if necessary */
+    display: inline-block;
+}
