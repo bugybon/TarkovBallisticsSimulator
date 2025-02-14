@@ -63,6 +63,7 @@
     <script>
 
         const socket = io("http://localhost:3000");
+
         socket.emit('requestArmorNames');
         socket.emit('requestBulletNames');
 
@@ -234,10 +235,14 @@
                         
                         const materialLabel = document.createElement('p');
                         materialLabel.textContent = `Material: ${plate.properties.material.id}`;
+
+                        const throughputLabel = document.createElement('p');
+                        throughputLabel.textContent = `Blunt number: ${plate.properties.bluntThroughput}`;
                         
                         infoContainer.appendChild(classLabel);
                         infoContainer.appendChild(durabilityLabel);
                         infoContainer.appendChild(materialLabel);
+                        infoContainer.appendChild(throughputLabel);
                         
                         container.appendChild(infoContainer);
                     });
@@ -289,14 +294,16 @@
                             nameID: slot.nameId,
                             class: slot.class,
                             durability: slot.durability,
-                            material: "aramid"
+                            material: "aramid",
+                            bluntThroughput: slot.bluntThroughput
                         });
                     } else {
                         softArmors.push({
                         nameID: slot.nameId,
                         class: slot.class,
                         durability: slot.durability,
-                        material: slot.material.name
+                        material: slot.material.name,
+                        bluntThroughput: slot.bluntThroughput
                     });
                     }
                 }
@@ -339,14 +346,20 @@
                 
                 const materialLabel = document.createElement('p');
                 materialLabel.textContent = `Material: ${armor.material}`;
+
+                const throughputLabel = document.createElement('p');
+                throughputLabel.textContent = `Blunt number: ${armor.bluntThroughput}`;
                 
                 infoContainer.appendChild(nameLabel);
                 infoContainer.appendChild(classLabel);
                 infoContainer.appendChild(durabilityLabel);
                 infoContainer.appendChild(materialLabel);
+                infoContainer.appendChild(nameLabel);
+                infoContainer.appendChild(throughputLabel);
                 
                 container.appendChild(infoContainer);
                 container.appendChild(imgContainer);
+                
                 
                 softArmorContainer.appendChild(container);
             });
@@ -390,6 +403,34 @@
                 button.style.display = text.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
             });
         }
+
+        socket.on("requestBulletData", () => {  
+
+            console.log("Backend requested bullet data");
+            const bulletContainer = document.getElementById('bullet');
+            const damageElement = bulletContainer.querySelector('p:nth-child(1)');
+            const penetrationElement = bulletContainer.querySelector('p:nth-child(2)');
+
+            if (damageElement && penetrationElement) {
+                const bulletData = {
+                    damage: parseInt(damageElement.textContent.split(": ")[1], 10),
+                    penetration: parseInt(penetrationElement.textContent.split(": ")[1], 10)
+                };
+
+                console.log("Extracted bullet data:", bulletData);
+                socket.emit("sendBulletData", bulletData);
+            } else {
+                console.error("Bullet data elements not found in the bullet div.");
+            }
+        });
+
+        // socket.on('getCurrentBodyArmorConfig', () => {
+            
+            
+
+        // });
+
+
     </script>
 </body>
 </html>

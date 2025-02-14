@@ -143,8 +143,17 @@ io.on("connection", (socket) => {
       }
     });
 
-    socket.on('sendHitAreas', (intersects) => {
-      console.log(intersects);
+    socket.on("sendHitAreas", (intersects) => {
+        console.log("Hit areas received:", intersects); 
+    
+        console.log("Sending request for bullet data..."); 
+        socket.emit("requestBulletData");  
+
+        
+    });
+
+    socket.on("sendBulletData", (bulletData) => {
+        console.log("Received bullet data:", bulletData);
     });
 
     socket.on('disconnect', () => {

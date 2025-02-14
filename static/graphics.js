@@ -23,8 +23,6 @@ const assets = [
     'body_allHitboxes',
 ];
 
-const socket = io("http://localhost:3000");
-
 init();
 
 function init() {
