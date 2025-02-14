@@ -7,6 +7,7 @@ const cors = require('cors');
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
+const { blackOutSpread } = require('./api/balistics');
 const io = new Server(server, {
   cors: { origin: "*" }
 });
@@ -166,7 +167,7 @@ io.on("connection", (socket) => {
         socket.emit("requestBulletData");
         try {
             bulletData = await getBulletData(socket); 
-            console.log("Using bullet data inside sendHitAreas:", bulletData);
+            //console.log("Using bullet data inside sendHitAreas:", bulletData);
         } catch (error) {
             console.error(error.message);
         }
@@ -175,7 +176,7 @@ io.on("connection", (socket) => {
         io.emit("requestBodyHP"); 
         try {
             bodyHP = await getBodyHP(socket); 
-            console.log("Using bodyHP data inside sendHitAreas:", bodyHP);
+            //console.log("Using bodyHP data inside sendHitAreas:", bodyHP);
         } catch (error) {
             console.error(error.message);
         }
@@ -188,23 +189,61 @@ io.on("connection", (socket) => {
             return hitboxToPartMapping[hitboxName] || "unknown"; 
         }
 
+        function probabilityCheck(chance) {
+            return Math.random() < (chance / 100);
+        }
+
+        async function getArmorData(part) {
+          return new Promise((resolve, reject) => {
+              io.emit("getArmorPart", part);
+              socket.once("sendArmorPart", (armorData) => {
+                  resolve(armorData);
+              });
+      
+              // Timeout to prevent it from hanging forever
+              // setTimeout(() => {
+              //     console.error(`Timeout: No response for armor part ${part}`);
+              //     reject(new Error(`Timeout waiting for armor data: ${part}`));
+              // }, 2000);
+          });
+      }
+      
+      
+
         for (let hitboxName of intersects) {
           let part = mapHitboxToPart(hitboxName); 
+          console.log(part);
 
           if(fleshParts.includes(part)){
-            if(bodyHP[part].currentHP - currBulletDmg >= 0){
-              bodyHP[part].currentHP == bodyHP[part].currentHP - currBulletDmg;
-            } else {
-              const overflow = - (bodyHP[part].currentHP - currBulletDmg);
-              bodyHP = distrubutionBemba(bodyHP, part, overflow);
-            }
-            
-            const penChance = api.ballistics.penetrationChance(2, currBulletPenetration, (bodyHP[part].currentHP/bodyHP[part].maxHP)*100);
+            const penChance = api.ballistics.penetrationChance(2, currBulletPenetration, (bodyHP[part].currentHP/bodyHP[part].maxHP)*100)*100;
+            const reductionFactor = api.ballistics.calculateReductionFactor(currBulletPenetration, ((bodyHP[part].currentHP/bodyHP[part].maxHP)*100), 2);
+            console.log(reductionFactor);
             console.log("Penetration chance of the bullet for the", part,  "is", penChance);
-          }
 
-          break;
+            if(bodyHP[part].currentHP - currBulletDmg >= 0){
+              bodyHP[part].currentHP = bodyHP[part].currentHP - currBulletDmg;
+            } else {
+              const overflow = currBulletDmg - bodyHP[part].currentHP ;
+              bodyHP[part].currentHP = 0;
+              bodyHP = api.ballistics.blackOutSpread(bodyHP, overflow, part);
+            }
+            if (probabilityCheck(penChance)) {
+                console.log("Successful penetration (", penChance, "% chance to pen!)");
+                currBulletDmg = currBulletDmg*reductionFactor;
+                currBulletPenetration = currBulletPenetration*reductionFactor;
+
+                console.log("curr bullet dmg and penetration: ", currBulletDmg, currBulletPenetration);
+            } else {
+                console.log("Failure to penetrate (", (100 - penChance), "% chance lowroll happened!)");
+                break;
+            }
+          }else{
+            const armorData = await getArmorData(part);
+            console.log(armorData);
+          }
       }
+
+      //console.log(bodyHP);
     });
   
     const fleshParts = ["head", "thorax", "left_arm", "right_arm", "stomach", "right_leg", "left_leg"];
@@ -224,7 +263,6 @@ io.on("connection", (socket) => {
       "LeftArmSoftArmorHitbox": "soft-armor-Shoulder_l",
       "RightArmSoftArmorHitbox": "soft-armor-Shoulder_r",
       "ButtoxSoftArmorHitbox": "soft-armor-Groin_back",
-  
       "EarsHeadArmorHitbox": "head",
       "EyesHeadArmorHitbox": "head",
       "HeadHitbox": "head",

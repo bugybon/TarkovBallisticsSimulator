@@ -38,8 +38,6 @@ function calculateFactorA(armorDurabilityPerc, armorClass) {
     return (121 - 5000 / (45 + (armorDurabilityPerc * 2))) * armorClass * 0.1;
 }
 
-
-
 function penetrationChance(armorClass, bulletPen, armorDurabilityPerc) {
     const factorA = calculateFactorA(armorDurabilityPerc, armorClass);
     if (armorDurabilityPerc === 0) return 1;
@@ -151,19 +149,26 @@ function calculateSingleShot(params) {
     return results;
 }
 
-function blackOutSpread(bodyHP, overflow, hitPart){
-    let currentMaxHP = maxHP;
+function blackOutSpread(bodyHP, overflow, hitPart) {
+    let currentMaxHP = 0;
 
-    bodyHP.forEach((part) =>{
-        if(part.currentHP == 0){
+    // Compute the total max HP
+    Object.values(bodyHP).forEach((part) => {
+        currentMaxHP += part.maxHP;
+    });
+
+    // Reduce max HP if a part is fully destroyed
+    Object.values(bodyHP).forEach((part) => {
+        if (part.currentHP === 0) {
             currentMaxHP -= part.maxHP;
         }
     });
-    
-    let damage = hitPartMultiplier[hitPart]*overflow;
 
-    bodyHP.forEach((part) =>{
-        if(part.currentHP != 0){
+    let damage = hitPartMultiplier[hitPart] * overflow;
+
+    // Distribute damage
+    Object.values(bodyHP).forEach((part) => {
+        if (part.currentHP !== 0) {
             part.currentHP = Math.max(part.currentHP - Math.round(damage * part.maxHP / currentMaxHP), 0);
         }
     });

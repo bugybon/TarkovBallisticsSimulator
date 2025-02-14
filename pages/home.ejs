@@ -34,14 +34,14 @@
         <img id="armorImage" src="armor.png"> 
     </div>
 
-    <div class="helmetDropdown">
+    <!-- <div class="helmetDropdown">
         <button class="dropbtn">Helmet</button>
         <div class="helmetDropdown-content">
             <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.helmetDropdown-content', 'button-helmet')">
         </div>
         <h1 id="helmetName"></h1>
         <img id="helmetImage" src="helmet.png"> 
-    </div>
+    </div> -->
 
     <div id="plate-selection"></div>
 
@@ -482,11 +482,48 @@
             socket.emit("sendBodyHP", bodyHP);
         });
 
-        // socket.on('getCurrentBodyArmorConfig', () => {
+        socket.on("getArmorPart", (name) => {
+            let armorContainer = document.getElementById(name);
             
-            
+            if (!armorContainer) {
+                console.warn(`Armor container not found using ID (${name}), trying class selector...`);
+                armorContainer = document.querySelector(`.${name}`);
+            }
 
-        // });
+            if (!armorContainer) {
+                console.error(`Armor part ${name} not found in the DOM!`);
+                socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
+                return;
+            }
+
+            let armorDiv = armorContainer.querySelector(".soft-armor-info, .plate-info");
+            
+            if (!armorDiv) {
+                console.error(`Armor info div not found inside: ${name}`);
+                socket.emit("sendArmorPart", { error: `Armor info missing in ${name}` });
+                return;
+            }
+
+            const armorInfo = {};
+            armorDiv.querySelectorAll("p").forEach((p) => {
+                const [key, value] = p.textContent.split(": ").map(str => str.trim());
+                if (key && value) {
+                    if (key.toLowerCase() === "durability") {
+                        let [current, max] = value.split("/").map(str => str.trim());
+                        armorInfo["durability"] = {
+                            current: parseInt(current),
+                            max: parseInt(max)
+                        };
+                    } else {
+                        armorInfo[key.toLowerCase().replace(/ /g, "_")] = value;
+                    }
+                }
+            });
+
+            socket.emit("sendArmorPart", armorInfo);
+        });
+
+
 
 
     </script>
