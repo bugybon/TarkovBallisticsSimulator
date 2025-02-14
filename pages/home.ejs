@@ -109,6 +109,34 @@
             });
         });
 
+        socket.on('recieveArmorNames', (names) => {
+
+            const dropdownContent = document.querySelector('.helmetDropdown-content');
+
+            console.log("Received helmet names:", names);
+
+            const helmetName = document.getElementById('helmetName'); 
+            const helmetImage = document.getElementById('helmetImage'); 
+
+            const options = names;//.map((item) => item['name']);
+            // console.log(options);
+
+            options.forEach((option, index) => {
+                const button = document.createElement('button-helmet');
+
+                button.textContent = option;
+                button.onclick = () => {
+                    console.log("Requesting helmet:", option);
+                    socket.emit('requestHelmetData', option);
+
+                    helmetName.textContent = option;
+                    helmetImage.src = `images/${option}.png`;
+                }
+
+                dropdownContent.appendChild(button);
+            });
+        });
+
         socket.on('recieveBulletNames', (names) => {
 
             const dropdownContent = document.querySelector('.bullDropdown-content');
