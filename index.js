@@ -144,7 +144,7 @@ io.on("connection", (socket) => {
     });
 
     function getBulletData(socket) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             socket.on("sendBulletData", (bulletData) => {
                 resolve(bulletData);
             });
