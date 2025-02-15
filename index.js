@@ -83,7 +83,9 @@ io.on("connection", (socket) => {
       try {
         let names = await api.itemQuery.getHelmets();
         names = names.items;
-        names = names.map((item) =>
+        names = names.filter((item) => 
+          item.properties.armorSlots !== null
+        ).map((item) =>
           item.name
         );
         
