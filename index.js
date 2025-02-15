@@ -264,6 +264,7 @@ io.on("connection", (socket) => {
             //console.log(part);
           }
       }
+      socket.emit('updatePlate', {part:"soft-armor-Soft_armor_front", cur:10, max:20});
 
       //console.log(bodyHP);
     });

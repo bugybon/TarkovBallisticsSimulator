@@ -273,7 +273,7 @@
                         
                         const durabilityLabel = document.createElement('p');
                         durabilityLabel.textContent = `Durability: ${plate.properties.durability} / ${plate.properties.durability}`;
-                        
+
                         const materialLabel = document.createElement('p');
                         materialLabel.textContent = `Material: ${plate.properties.material.id}`;
 
@@ -541,8 +541,16 @@
             socket.emit("sendArmorPart", armorInfo);
         });
 
-
-
+        socket.on("updatePlate", (param) =>{
+            let plate = document.getElementById(param.part).children;
+            if(param.part.includes("soft")){
+                plate = plate.item(0).children.item(1);
+            }else{
+                plate = plate.item(3).children.item(2);
+            }
+            //console.log(plate);
+            plate.innerText = "Durability: " + param.cur + " / " + param.max;
+        });
 
     </script>
 </body>
