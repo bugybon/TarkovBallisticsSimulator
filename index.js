@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
         
         if(names){
           socket.emit('recieveArmorNames', names);
+          socket.emit('recieveHelmetNames', names);
         }else{
           socket.emit('recieveArmorNamesError',{error: "Names couldn't be generated"});
         }
@@ -247,7 +248,7 @@ io.on("connection", (socket) => {
             }
           }else{
             const armorData = await getArmorData(part);
-            //console.log(armorData);
+            console.log(armorData);
             //console.log(part);
 
             if(armorData.error){
@@ -263,20 +264,29 @@ io.on("connection", (socket) => {
                   armorClass: parseInt(armorData.class),
                   bluntDamageThroughput: parseFloat(armorData.blunt_number),
                   durability: parseFloat(armorData.durability.current),
-                  maxDurability: parseInt(armorData.durability.max),
+                  maxDurability: parseFloat(armorData.durability.max),
                   armorMaterial: armorData.material
                 }
             };
 
+            console.log(params);
+
             const results = api.ballistics.calculateSingleShot(params);
-            console.log(results);
-            console.log(results.penetrationChance);
+            // console.log(results);
+            // console.log(results.penetrationChance);
+
+            console.log({
+              part: part,
+              cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
+              max: parseFloat(armorData.durability.max)
+            });
+
             if (probabilityCheck(results.penetrationChance*100)) {
                 console.log("Successful penetration (", results.penetrationChance*100, "% chance to pen!)");
                 socket.emit('updatePlate', {
                   part: part,
                   cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
-                  max: armorData.durability.maxDurability
+                  max: parseFloat(armorData.durability.max)
                 });
 
                 currBulletDmg = currBulletDmg*results.reductionFactor;
@@ -287,7 +297,7 @@ io.on("connection", (socket) => {
                 socket.emit('updatePlate', {
                   part: part,
                   cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
-                  max: armorData.durability.maxDurability
+                  max: parseFloat(armorData.durability.max)
                 });
                 
                 const damage = currBulletDmg*results.bluntDamage;

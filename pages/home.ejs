@@ -34,15 +34,6 @@
         <img id="armorImage" src="armor.png"> 
     </div>
 
-    <!-- <div class="helmetDropdown">
-        <button class="dropbtn">Helmet</button>
-        <div class="helmetDropdown-content">
-            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.helmetDropdown-content', 'button-helmet')">
-        </div>
-        <h1 id="helmetName"></h1>
-        <img id="helmetImage" src="helmet.png"> 
-    </div> -->
-
     <div id="plate-selection"></div>
 
     <div id="soft-armors"></div>
@@ -75,6 +66,7 @@
 
         socket.emit('requestArmorNames');
         socket.emit('requestBulletNames');
+        socket.emit('requestHelmetNames');
 
         function clearBox(elementID)
         {
@@ -103,34 +95,6 @@
 
                     armorName.textContent = option;
                     armorImage.src = `images/${option}.png`;
-                }
-
-                dropdownContent.appendChild(button);
-            });
-        });
-
-        socket.on('recieveArmorNames', (names) => {
-
-            const dropdownContent = document.querySelector('.helmetDropdown-content');
-
-            console.log("Received helmet names:", names);
-
-            const helmetName = document.getElementById('helmetName'); 
-            const helmetImage = document.getElementById('helmetImage'); 
-
-            const options = names;//.map((item) => item['name']);
-            // console.log(options);
-
-            options.forEach((option, index) => {
-                const button = document.createElement('button-helmet');
-
-                button.textContent = option;
-                button.onclick = () => {
-                    console.log("Requesting helmet:", option);
-                    socket.emit('requestHelmetData', option);
-
-                    helmetName.textContent = option;
-                    helmetImage.src = `images/${option}.png`;
                 }
 
                 dropdownContent.appendChild(button);
@@ -549,7 +513,7 @@
             if(param.part.includes("soft")){
                 plate = plate.item(0).children.item(1);
             }else{
-                plate = plate.item(4).children.item(2);
+                plate = plate.item(4).children.item(1);
             }
             //console.log(plate);
             plate.innerText = "Durability: " + param.cur + " / " + param.max;
