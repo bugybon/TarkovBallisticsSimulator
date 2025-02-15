@@ -126,7 +126,7 @@ canvas{
 #resetHPBtn {
     position: absolute;
     width: 130px;                   
-    top: 750px;             
+    top: 850px;             
     right: 300px;            
     padding: 8px 16px;
     background-color: #eee;
@@ -136,7 +136,7 @@ canvas{
 
 #visibleRay {
     position: absolute;                        
-    top: 800px;
+    top: 900px;
     width: 130px;
     right: 300px;            
     padding: 8px 16px;
@@ -407,9 +407,6 @@ canvas{
 #helmetName {
     font-size: 16px; /* Reduce text size */
     width: 70%; /* Ensure it doesn’t overflow */
-    text-align: center; /* Center the name */
-    display: block; /* Ensure it stays on its own line */
-    margin-top: 5px; /* Add spacing below the button */
 }
 
 
@@ -417,7 +414,7 @@ canvas{
 #helmet-selection {
     position: absolute;
     top: 200px; /* Adjust as necessary */
-    left: 1435px; /* Align it properly */
+    left: 1350px; /* Align it properly */
     width: 270px;
     background-color: rgba(255, 255, 255, 0.9); 
     padding: 10px;

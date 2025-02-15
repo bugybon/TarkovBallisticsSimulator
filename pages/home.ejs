@@ -144,7 +144,6 @@
 
         socket.on('recieveHelmetNames', (names) => {
             const dropdownContent = document.querySelector('.helmetDropdown-content');
-            dropdownContent.innerHTML = ""; 
 
             console.log("Received helmet names:", names);
 
@@ -152,8 +151,8 @@
             const helmetImage = document.getElementById('helmetImage'); 
 
             names.forEach((option) => {
-                const button = document.createElement('button'); 
-                button.classList.add("helmet-button");
+                const button = document.createElement('button-helmet'); 
+                //button.classList.add("helmet-button");
                 button.textContent = option;
                 button.onclick = () => {
                     console.log("Requesting helmet:", option);
@@ -167,12 +166,40 @@
             });
         });
 
+        socket.on('recieveHelmetNames', (names) => {
+            const dropdownContent = document.querySelector('.helmetDropdown-content');
+            dropdownContent.innerHTML = ""; 
+
+            const searchInput = document.createElement("input");
+            searchInput.type = "text";
+            searchInput.classList.add("search-input");
+            searchInput.placeholder = "Search...";
+            searchInput.setAttribute("onkeyup", "filterOptions(this, '.helmetDropdown-content', '.button-helmet')");
+            dropdownContent.appendChild(searchInput); // Add input to the dropdown
+
+            console.log("Received helmet names:", names);
+
+            names.forEach((option) => {
+                const button = document.createElement("button"); // Standard <button> element
+                button.classList.add("button-helmet"); // Use class for search filtering
+                button.textContent = option;
+                button.onclick = () => {
+                    console.log("Requesting helmet:", option);
+                    socket.emit("requestHelmetData", option);
+                };
+
+                dropdownContent.appendChild(button);
+            });
+        });
+
+        
+
         function extractHelmetSlots(data) {
             const slots = [];
             
             if (!data || !data.items || data.items.length === 0) return slots;
 
-            const helmet = data.items[0]; // Assume we only receive one helmet at a time
+            const helmet = data.items[0]; 
             helmet.properties.armorSlots.forEach(slot => {
                 slots.push({
                     nameID: slot.nameId,
