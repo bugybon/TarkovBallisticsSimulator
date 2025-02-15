@@ -357,7 +357,7 @@ canvas{
 
 .helmetDropdown {
     position: absolute;
-    left: 225px; /* Adjust to position next to your armor dropdown */
+    left: 1425px; /* Adjust to position next to your armor dropdown */
     top: 0;
     display: inline-block;
 }
