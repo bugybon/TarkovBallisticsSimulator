@@ -60,9 +60,16 @@ function penetrationDamage(armorDurabilityPerc, armorClass, bulletDamage, bullet
 }
 
 function bluntDamage(armorDurabilityPerc, armorClass, bluntThroughput, bulletDamage, bulletPenetration) {
+    function median(a, b, c) {
+      const arr = [a, b, c].sort((x, y) => x - y);
+      return arr[1];
+    }
+  
     const factorA = calculateFactorA(armorDurabilityPerc, armorClass);
-    const reduction = Math.max(0.2, 1 - (0.03 * (factorA - bulletPenetration)));
-    return bluntThroughput * reduction * bulletDamage;
+    const medianResult = median(0.2, 1 - (0.03 * (factorA - bulletPenetration)), 1);
+  
+    const finalResult = bluntThroughput * medianResult * bulletDamage;
+    return finalResult;
 }
 
 function damageToArmorPenetration(armorClass, armorMaterial, bulletPenetration, bulletArmorDamagePercentage, armorDurability) {

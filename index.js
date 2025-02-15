@@ -208,8 +208,6 @@ io.on("connection", (socket) => {
           });
       }
       
-      
-
         for (let hitboxName of intersects) {
           let part = mapHitboxToPart(hitboxName); 
           console.log(part);
@@ -239,7 +237,31 @@ io.on("connection", (socket) => {
             }
           }else{
             const armorData = await getArmorData(part);
-            console.log(armorData);
+            if(armorData.error){
+              continue;
+            }
+
+            const params = {
+              penetration: currBulletPenetration,
+              damage: currBulletDmg,
+              armorDamagePerc: armorDamage,
+              armorLayers: [
+                {
+                  isPlate: part.toLowerCase().includes("plate"),
+                  armorClass: parseInt(armorData.class),
+                  bluntDamageThroughput: parseFloat(armorData.blunt_number),
+                  durability: parseInt(armorData.durability.current),
+                  maxDurability: parseInt(armorData.durability.max),
+                  armorMaterial: armorData.material
+                }
+              ]
+            };
+
+            const results = api.ballistics.calculateSingleShot(params);
+
+            console.log(results);
+            //console.log(armorData);
+            //console.log(part);
           }
       }
 

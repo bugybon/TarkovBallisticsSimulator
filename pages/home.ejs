@@ -272,7 +272,7 @@
                         classLabel.textContent = `Class: ${plate.properties.class}`;
                         
                         const durabilityLabel = document.createElement('p');
-                        durabilityLabel.textContent = `Durability:${plate.properties.durability} / ${plate.properties.durability}`;
+                        durabilityLabel.textContent = `Durability: ${plate.properties.durability} / ${plate.properties.durability}`;
                         
                         const materialLabel = document.createElement('p');
                         materialLabel.textContent = `Material: ${plate.properties.material.id}`;
@@ -383,7 +383,7 @@
                 classLabel.textContent = `Class: ${armor.class}`;
                 
                 const durabilityLabel = document.createElement('p');
-                durabilityLabel.textContent = `Durability:${armor.durability} / ${armor.durability}`;
+                durabilityLabel.textContent = `Durability: ${armor.durability} / ${armor.durability}`;
                 
                 const materialLabel = document.createElement('p');
                 materialLabel.textContent = `Material: ${armor.material}`;
@@ -484,7 +484,7 @@
 
         socket.on("getArmorPart", (name) => {
             let armorContainer = document.getElementById(name);
-            
+            //.inclued()
             if (!armorContainer) {
                 console.warn(`Armor container not found using ID (${name}), trying class selector...`);
                 armorContainer = document.querySelector(`.${name}`);
@@ -497,7 +497,8 @@
             }
 
             let armorDiv = armorContainer.querySelector(".soft-armor-info, .plate-info");
-            
+            // console.log(armorDiv);
+
             if (!armorDiv) {
                 console.error(`Armor info div not found inside: ${name}`);
                 socket.emit("sendArmorPart", { error: `Armor info missing in ${name}` });
@@ -520,6 +521,7 @@
                 }
             });
 
+            //console.log(armorInfo);
             socket.emit("sendArmorPart", armorInfo);
         });
 

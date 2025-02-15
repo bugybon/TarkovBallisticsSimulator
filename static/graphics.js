@@ -151,6 +151,11 @@ window.addEventListener('click', (event) => {
     pointer.x = ((event.clientX / window.innerWidth) * 2 - 1)/widthAspect;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+    console.log(pointer.x);
+    if(pointer.x < -1 || pointer.x > 1){
+        return;
+    }
+
     raycaster.setFromCamera(pointer, camera);
 
     const hitbox = scene.children.filter((group) => group.name == "hitbox");
