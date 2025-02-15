@@ -146,7 +146,10 @@ let arrow;
 // const scene = YOUR_SCENE; // Replace with your scene
 
 // On mouse click
-window.addEventListener('click', (event) => {
+window.addEventListener('auxclick', (event) => {
+    if(event.button !== 1){
+        return;
+    }
     // Update pointer coordinates
     pointer.x = ((event.clientX / window.innerWidth) * 2 - 1)/widthAspect;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
