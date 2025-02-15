@@ -66,13 +66,31 @@ io.on("connection", (socket) => {
         
         if(names){
           socket.emit('recieveArmorNames', names);
-          socket.emit('recieveHelmetNames', names);
         }else{
           socket.emit('recieveArmorNamesError',{error: "Names couldn't be generated"});
         }
       }catch(error){
         console.error("Error fetching armor data:", error);
         socket.emit('recieveArmorNamesError', { error: "Server error" });
+      }
+    });
+
+    socket.on('requestHelmetNames', async () => {
+      try {
+        let names = await api.itemQuery.getHelmet();
+        names = names.items;
+        names = names.map((item) =>
+          item.name
+        );
+        
+        if(names){
+          socket.emit('recieveHelmetNames', names);
+        }else{
+          socket.emit('recieveHelmetNamesError',{error: "Names couldn't be generated"});
+        }
+      }catch(error){
+        console.error("Error fetching Helmet data:", error);
+        socket.emit('recieveHelmetNamesError', { error: "Server error" });
       }
     });
 
