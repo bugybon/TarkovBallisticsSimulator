@@ -192,7 +192,7 @@ io.on("connection", (socket) => {
         }
 
         let bodyHP;
-        io.emit("requestBodyHP"); 
+        socket.emit("requestBodyHP"); 
         try {
             bodyHP = await getBodyHP(socket); 
             //console.log("Using bodyHP data inside sendHitAreas:", bodyHP);
@@ -214,7 +214,7 @@ io.on("connection", (socket) => {
 
         async function getArmorData(part) {
           return new Promise((resolve, reject) => {
-              io.emit("getArmorPart", part);
+              socket.emit("getArmorPart", part);
               socket.once("sendArmorPart", (armorData) => {
                   resolve(armorData);
               });
@@ -340,7 +340,7 @@ io.on("connection", (socket) => {
       console.log("about to emit HP");
       console.log(bodyHP);
       //socket.emit('updateHP', bodyHP);
-      io.emit("updateHP", bodyHP);
+      socket.emit("updateHP", bodyHP);
     });
   
     const fleshParts = ["head", "thorax", "left_arm", "right_arm", "stomach", "right_leg", "left_leg"];
