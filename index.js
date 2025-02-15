@@ -300,7 +300,7 @@ io.on("connection", (socket) => {
                   max: parseFloat(armorData.durability.max)
                 });
                 
-                const damage = currBulletDmg*results.bluntDamage;
+                const damage = (currBulletDmg-results.mitigatedDamage)*results.bluntDamage*results.reductionFactor;
                 console.log(damage);
                 const flesh = findFirstFleshPart(intersects, i);
                   if(flesh){
@@ -362,12 +362,6 @@ io.on("connection", (socket) => {
       console.log('User disconnected:', socket.id);
     });
 })
-
-// setInterval(() => {
-//   console.log("Emitting test updatePlate...");
-//   // Example: Always send the same part + newDurability + maxDurability
-//   io.emit("updatePlate", "plate-container-front_plate", 20, 45);
-// }, 5000);
 
 server.listen(3000, () => {
   console.log('Server is listening on http://localhost:3000');

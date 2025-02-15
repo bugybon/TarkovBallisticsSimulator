@@ -60,6 +60,8 @@
         <div id="right_leg" class="HP_container">65/65</div>
     </div>
 
+    <button id="resetHPBtn">Reset HP</button>
+
     <script>
 
         const socket = io("http://localhost:3000");
@@ -517,6 +519,25 @@
             }
             //console.log(plate);
             plate.innerText = "Durability: " + param.cur + " / " + param.max;
+        });
+
+        const defaultHP = {
+            head: 35,
+            left_arm: 60,
+            right_arm: 60,
+            thorax: 85,
+            stomach: 70,
+            left_leg: 65,
+            right_leg: 65
+        };
+
+        document.getElementById('resetHPBtn').addEventListener('click', () => {
+            for (const part in defaultHP) {
+                const element = document.getElementById(part);
+                if (!element) continue; 
+                const hpValue = defaultHP[part];
+                element.textContent = `${hpValue}/${hpValue}`;
+            }
         });
 
     </script>
