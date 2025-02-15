@@ -506,17 +506,7 @@
             let armorDiv;
             let armorContainer = document.getElementById(name);
             console.log("armorContainer=",armorContainer);
-            // if(name.includes("soft") && !armorContainer){
-            //     console.warn(`Armor container not found using ID (${name}), trying class selector...`);
-            //     armorContainer = document.querySelector(`.${name}`);
-            //     let armorDiv = armorContainer.querySelector(".soft-armor-info
-                
-            // }else if (!armorContainer) {
-            //     console.error(`Armor part ${name} not found in the DOM!`);
-            //     socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
-            //     return;
-            // }
-
+           
             if(!armorContainer){
                 socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
             }
@@ -554,11 +544,12 @@
         });
 
         socket.on("updatePlate", (param) =>{
+            console.log(param.part);
             let plate = document.getElementById(param.part).children;
             if(param.part.includes("soft")){
                 plate = plate.item(0).children.item(1);
             }else{
-                plate = plate.item(3).children.item(2);
+                plate = plate.item(4).children.item(2);
             }
             //console.log(plate);
             plate.innerText = "Durability: " + param.cur + " / " + param.max;

@@ -273,16 +273,25 @@ io.on("connection", (socket) => {
             console.log(results.penetrationChance);
             if (probabilityCheck(results.penetrationChance*100)) {
                 console.log("Successful penetration (", results.penetrationChance*100, "% chance to pen!)");
-                //io.emit("updatePlate", part, Math.max((parseFloat(armorData.durability.current)-results.penetrationArmorDamage), 0));
+                socket.emit('updatePlate', {
+                  part: part,
+                  cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
+                  max: armorData.durability.maxDurability
+                });
 
                 currBulletDmg = currBulletDmg*results.reductionFactor;
                 currBulletPenetration = results.postArmorPenetration;
                 console.log("curr bullet dmg and penetration: ", currBulletDmg, currBulletPenetration);
               }else{
                 console.log("Failure to penetrate (", (100 - (results.penetrationChance*100)), "% chance lowroll happened!)");
-                //io.emit("updatePlate", part, Math.max((parseFloat(armorData.durability.current)-results.penetrationArmorDamage), 0), armorData.durability.maxDurability);
+                socket.emit('updatePlate', {
+                  part: part,
+                  cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
+                  max: armorData.durability.maxDurability
+                });
                 
                 const damage = currBulletDmg*results.bluntDamage;
+                console.log(damage);
                 const flesh = findFirstFleshPart(intersects, i);
                   if(flesh){
                     if(bodyHP[flesh].currentHP - damage >= 0){
@@ -298,7 +307,7 @@ io.on("connection", (socket) => {
             
           }
       }
-      socket.emit('updatePlate', {part:"soft-armor-Soft_armor_front", cur:10, max:20});
+      //socket.emit('updatePlate', {part:"soft-armor-Soft_armor_front", cur:10, max:20});
 
       console.log("about to emit HP");
       console.log(bodyHP);
@@ -343,6 +352,12 @@ io.on("connection", (socket) => {
       console.log('User disconnected:', socket.id);
     });
 })
+
+// setInterval(() => {
+//   console.log("Emitting test updatePlate...");
+//   // Example: Always send the same part + newDurability + maxDurability
+//   io.emit("updatePlate", "plate-container-front_plate", 20, 45);
+// }, 5000);
 
 server.listen(3000, () => {
   console.log('Server is listening on http://localhost:3000');
