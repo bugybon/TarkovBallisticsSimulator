@@ -17,7 +17,7 @@
     </script>
 
     <script src="/socket.io/socket.io.js"></script>
-
+    <script>let visibleArrow = false;</script>
     <script type="module" src="/graphics.js" async defer></script>
     <!-- <script type="module" src="/itemQuery.js" async defer></script> -->
     <link rel="stylesheet" href="/style.css">
@@ -61,6 +61,7 @@
     </div>
 
     <button id="resetHPBtn">Reset HP</button>
+    <button id="visibleRay">Show trejectory</button>
 
     <script>
 
@@ -537,6 +538,16 @@
                 if (!element) continue; 
                 const hpValue = defaultHP[part];
                 element.textContent = `${hpValue}/${hpValue}`;
+            }
+        });
+
+        document.getElementById('visibleRay').addEventListener('click', () => {
+            visibleArrow = !visibleArrow;
+            button = document.getElementById('visibleRay');
+            if(visibleArrow){
+                button.innerText = "Hide trejectory";
+            }else{
+                button.innerText = "Show trejectory";
             }
         });
 

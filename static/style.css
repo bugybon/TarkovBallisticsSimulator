@@ -122,14 +122,26 @@ canvas{
 }
 
 #resetHPBtn {
-    position: absolute;                        
-    top: 1000px;             
-    right: 130px;            
+    position: absolute;
+    width: 130px;                   
+    top: 450px;             
+    right: 300px;            
     padding: 8px 16px;
     background-color: #eee;
     border: 1px solid #ccc;
     cursor: pointer;
-  }
+}
+
+#visibleRay {
+    position: absolute;                        
+    top: 500px;
+    width: 130px;
+    right: 300px;            
+    padding: 8px 16px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
 
 #armorName {
     font-size: 16px;

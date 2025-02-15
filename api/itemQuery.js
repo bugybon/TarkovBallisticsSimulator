@@ -83,6 +83,31 @@ const queryBullet = graphql_req.gql`{
     }
 }`;
 
+const queryHelmets = graphql_req.gql`{
+    items(lang: en, types: [helmet]) {
+      name
+      properties {
+        ... on ItemPropertiesHelmet {
+          armorSlots {
+            ... on ItemArmorSlotLocked {
+              nameId
+              class
+              durability
+              bluntThroughput
+              ricochetX
+              ricochetY
+              ricochetZ
+              material {
+                name
+                destructibility
+              }
+            }
+          }
+        }
+      }
+    }
+  }`;
+
 async function getArmorRig(){
     return new Promise((res,rej) => {
         let content = graphql_req.request(apiUrl, queryArmorRig);
@@ -104,4 +129,11 @@ async function getBullet(){
     });
 }
 
-module.exports= {getArmorRig, getArmorPlate, getBullet};
+async function getHelmets(){
+    return new Promise(async (res, rej)=>{
+        let content = await graphql_req.request(apiUrl, queryHelmets);
+        res(content);
+    });
+}
+
+module.exports= {getArmorRig, getArmorPlate, getBullet, getHelmets};

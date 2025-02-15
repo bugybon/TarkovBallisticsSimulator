@@ -54,7 +54,7 @@ function init() {
     // scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
 
     // ground
-    const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 200, 200), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
+    const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 200, 200), new THREE.MeshPhongMaterial( { color: 0x199919, depthWrite: false } ) );
     mesh.rotation.x = - Math.PI / 2;
     //mesh.receiveShadow = true;
     scene.add( mesh );
@@ -139,7 +139,7 @@ function onWindowResize() {
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-
+let arrow;
 // raycaster.layers.enable(0);
 
 // const camera = YOUR_CAMERA; // Replace with your camera
@@ -159,8 +159,18 @@ window.addEventListener('click', (event) => {
     raycaster.setFromCamera(pointer, camera);
 
     const hitbox = scene.children.filter((group) => group.name == "hitbox");
-    const intersects = raycaster.intersectObjects(hitbox, true); // Use 'true' to check children
-    //scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000) );
+    const intersects = raycaster.intersectObjects(hitbox, true);// Use 'true' to check children
+
+    if(visibleArrow){
+        if(arrow){
+            scene.remove(arrow);
+        }
+        arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000);
+        scene.add(arrow);
+    }else if (!visibleArrow && arrow){
+        scene.remove(arrow);
+        arrow = undefined;
+    }
 
     const trueIntersects = [];
     for (let i = 0; i < intersects.length; i++){
