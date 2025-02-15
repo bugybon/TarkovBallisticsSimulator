@@ -388,7 +388,7 @@ canvas{
     padding: 12px 16px;
     text-align: left;
     text-decoration: none;
-    display: block;
+    /* display: block; */
     width: 100%;
     cursor: pointer;
     font-size: 14px; /* Keep text readable */
@@ -416,21 +416,20 @@ canvas{
 /* Helmet selection container */
 #helmet-selection {
     position: absolute;
-    top: 150px; /* Adjust as necessary */
-    left: 1425px; /* Align it properly */
+    top: 200px; /* Adjust as necessary */
+    left: 1435px; /* Align it properly */
     width: 270px;
-    /* background-color: rgba(255, 255, 255, 0.9); */
+    background-color: rgba(255, 255, 255, 0.9); 
     padding: 10px;
     /* border-radius: 8px; */
     /* border: 1px solid #ccc; */
     /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); */
-    z-index: 5; /* Ensure it appears above other elements */
 }
 
 .helmet-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     width: 70%;
     border: 1px solid #ccc;
