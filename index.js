@@ -34,6 +34,10 @@ const armorDataBD = api.itemQuery.getArmorRig().then((data) =>{
   return data.items;
 });
 
+const helmetDataBD = api.itemQuery.getHelmets().then((data) =>{
+  return data.items;
+});
+
 const armorPlateDataDB = api.itemQuery.getArmorPlate().then((data) =>{
   //console.log(data.items);
   return data.items;
@@ -111,7 +115,7 @@ io.on("connection", (socket) => {
 
     socket.on('requestHelmetData', async(helmetName) => {
       try {
-        const helmet = await findItemAsync(helmetName,HelmetDataBD); 
+        const helmet = await findItemAsync(helmetName,helmetDataBD); 
 
           if (helmet) {
               socket.emit('recieveHelmetData', helmet);
