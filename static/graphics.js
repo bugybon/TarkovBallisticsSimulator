@@ -75,6 +75,11 @@ function init() {
     container.appendChild( renderer.domElement );
 
     const controls = new OrbitControls( camera, renderer.domElement );
+    controls.mouseButtons = {
+        LEFT: null,
+        MIDDLE: THREE.MOUSE.ROTATE,
+        RIGHT: THREE.MOUSE.PAN
+    }
     controls.target.set( 0, 1, 0 );
     controls.update();
 
@@ -146,10 +151,8 @@ let arrow;
 // const scene = YOUR_SCENE; // Replace with your scene
 
 // On mouse click
-window.addEventListener('auxclick', (event) => {
-    if(event.button !== 1){
-        return;
-    }
+window.addEventListener('click', (event) => {
+
     // Update pointer coordinates
     pointer.x = ((event.clientX / window.innerWidth) * 2 - 1)/widthAspect;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
