@@ -287,9 +287,17 @@
                         
                         container.appendChild(infoContainer);
                     });
-                } else {
+                }else{
                     img.src = `images/placeholder.png`;
                     label.textContent = "";
+
+                    const existingInfo = container.querySelector('.plate-info');
+                    if (existingInfo) existingInfo.remove();
+
+                    console.log(selectedPlate);
+                    const infoContainer = document.createElement('div');
+                    infoContainer.classList.add('plate-info');
+                    container.appendChild(infoContainer);
                 }
             });
 
@@ -483,21 +491,29 @@
         });
 
         socket.on("getArmorPart", (name) => {
+            let armorDiv;
             let armorContainer = document.getElementById(name);
-            //.inclued()
-            if (!armorContainer) {
-                console.warn(`Armor container not found using ID (${name}), trying class selector...`);
-                armorContainer = document.querySelector(`.${name}`);
-            }
+            console.log("armorContainer=",armorContainer);
+            // if(name.includes("soft") && !armorContainer){
+            //     console.warn(`Armor container not found using ID (${name}), trying class selector...`);
+            //     armorContainer = document.querySelector(`.${name}`);
+            //     let armorDiv = armorContainer.querySelector(".soft-armor-info
+                
+            // }else if (!armorContainer) {
+            //     console.error(`Armor part ${name} not found in the DOM!`);
+            //     socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
+            //     return;
+            // }
 
-            if (!armorContainer) {
-                console.error(`Armor part ${name} not found in the DOM!`);
+            if(!armorContainer){
                 socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
-                return;
             }
-
-            let armorDiv = armorContainer.querySelector(".soft-armor-info, .plate-info");
-            // console.log(armorDiv);
+            if(name.includes("soft")){
+                armorDiv = armorContainer.querySelector(".soft-armor-info");
+            }else{
+                armorDiv = armorContainer.querySelector(".plate-info");
+            }
+            console.log(armorDiv);
 
             if (!armorDiv) {
                 console.error(`Armor info div not found inside: ${name}`);
