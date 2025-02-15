@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
 
     socket.on('requestHelmetNames', async () => {
       try {
-        let names = await api.itemQuery.getHelmet();
+        let names = await api.itemQuery.getHelmets();
         names = names.items;
         names = names.map((item) =>
           item.name

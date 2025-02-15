@@ -38,6 +38,8 @@ canvas{
     overflow-y: auto; /* Enables scrolling for long lists */
 }
 
+
+
 .armorDropdown-content button-armor {
     background-color: white;
     color: black;
@@ -243,6 +245,13 @@ canvas{
     display: inline-block;
 }
 
+.helmetDropdown {
+    position: absolute;
+    left: 0; /* Position it on the right */
+    top: 0;   /* Adjust the top value if necessary */
+    display: inline-block;
+}
+
 .bullDropdown-content {
     display: none;
     position: absolute;
@@ -331,4 +340,73 @@ canvas{
     left: 225px; /* Position it on the right */
     top: 300px;   /* Adjust the top value if necessary */
     display: inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.helmetDropdown {
+    position: absolute;
+    left: 225px; /* Adjust to position next to your armor dropdown */
+    top: 0;
+    display: inline-block;
+}
+
+/* The hidden dropdown menu container for helmets */
+.helmetDropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 500px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2; /* Make sure it's above other elements */
+    max-height: 300px; 
+    overflow-y: auto; /* Scrolling if there are many helmet options */
+}
+
+/* Buttons inside the helmet dropdown */
+.helmetDropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 100%;
+    top: 100%;
+    left: 0;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 2;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Hover effect on the helmet buttons */
+.helmetDropdown-content button-helmet:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown on hover */
+.helmetDropdown:hover .helmetDropdown-content {
+    display: block;
+}
+
+/* Change the main button color on hover */
+.helmetDropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+#helmetName {
+    font-size: 16px; /* Reduce text size */
+    width: 70%; /* Ensure it doesn’t overflow */
+    text-align: center; /* Center the name */
+    display: block; /* Ensure it stays on its own line */
+    margin-top: 5px; /* Add spacing below the button */
 }
