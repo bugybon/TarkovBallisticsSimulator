@@ -285,14 +285,14 @@
             const projectilesCount = document.createElement('p');
             projectilesCount.textContent = `Projectile Count: ${data.projectileCount}`;
 
-            const ricochetChance = document.createElement('p');
-            ricochetChance.testContent = `Ricochet chance: ${data.ricochetChance}`;
+            // const ricochetChance = document.createElement('p');
+            // ricochetChance.textContent = `Ricochet chance: ${data.ricochetChance}`;
             
             container.appendChild(damage);
             container.appendChild(armorDamage);
             container.appendChild(penetration);
             container.appendChild(projectilesCount);
-            container.appendChild(ricochetChance);
+            // container.appendChild(ricochetChance);
 
             bulletContainer.appendChild(container);
         }
@@ -562,15 +562,15 @@
             const damageElement = bulletContainer.querySelector('p:nth-child(1)');
             const armorDamageElement = bulletContainer.querySelector('p:nth-child(2)');
             const penetrationElement = bulletContainer.querySelector('p:nth-child(3)');
+            const ricochetElement = bulletContainer.querySelector('p:nth-child(4)');
 
             if (damageElement && armorDamageElement && penetrationElement) {
                 const bulletData = {
                     damage: parseInt(damageElement.textContent.split(": ")[1], 10),
                     armorDamage: parseInt(armorDamageElement.textContent.split(": ")[1], 10),
-                    penetration: parseInt(penetrationElement.textContent.split(": ")[1], 10)
+                    penetration: parseInt(penetrationElement.textContent.split(": ")[1], 10),
                 };
 
-                //console.log("Extracted bullet data:", bulletData);
                 socket.emit("sendBulletData", bulletData);
             } else {
                 console.error("Bullet data elements not found in the bullet div.");
