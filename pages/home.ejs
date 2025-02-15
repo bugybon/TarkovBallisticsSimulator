@@ -490,6 +490,18 @@
             socket.emit("sendBodyHP", bodyHP);
         });
 
+        socket.on("updateHP", (updatedBodyHP) => {
+            console.log("in updateHP socket");
+            for (const part in updatedBodyHP) {
+                const { currentHP, maxHP } = updatedBodyHP[part];
+                const element = document.getElementById(part);
+
+                if (element) {
+                    element.textContent = `${Math.floor(currentHP)}/${maxHP}`;
+                }
+            }
+        });
+
         socket.on("getArmorPart", (name) => {
             let armorDiv;
             let armorContainer = document.getElementById(name);

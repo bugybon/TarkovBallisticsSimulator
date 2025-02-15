@@ -146,7 +146,7 @@ io.on("connection", (socket) => {
 
     function getBulletData(socket) {
         return new Promise((resolve) => {
-            socket.on("sendBulletData", (bulletData) => {
+            socket.once("sendBulletData", (bulletData) => {
                 resolve(bulletData);
             });
         });
@@ -154,7 +154,7 @@ io.on("connection", (socket) => {
 
     function getBodyHP(socket) {
         return new Promise((resolve) => {
-            socket.on("sendBodyHP", (bodyHP) => {
+            socket.once("sendBodyHP", (bodyHP) => {
                 resolve(bodyHP);
             });
         });
@@ -200,15 +200,25 @@ io.on("connection", (socket) => {
                   resolve(armorData);
               });
       
-              // Timeout to prevent it from hanging forever
               // setTimeout(() => {
               //     console.error(`Timeout: No response for armor part ${part}`);
               //     reject(new Error(`Timeout waiting for armor data: ${part}`));
               // }, 2000);
           });
       }
+
+      function findFirstFleshPart(intersects, startIndex) {
+        for (let i = startIndex; i < intersects.length; i++) {
+          const part = mapHitboxToPart(intersects[i]);
+          if (fleshParts.includes(part)) {
+            return part; 
+          }
+        }
+        return null; 
+      }
       
-        for (let hitboxName of intersects) {
+        for (let i = 0; i < intersects.length; ++i) {
+          hitboxName = intersects[i];
           let part = mapHitboxToPart(hitboxName); 
           console.log(part);
 
@@ -237,6 +247,9 @@ io.on("connection", (socket) => {
             }
           }else{
             const armorData = await getArmorData(part);
+            //console.log(armorData);
+            //console.log(part);
+
             if(armorData.error){
               continue;
             }
@@ -245,28 +258,52 @@ io.on("connection", (socket) => {
               penetration: currBulletPenetration,
               damage: currBulletDmg,
               armorDamagePerc: armorDamage,
-              armorLayers: [
-                {
+              armorLayer: {
                   isPlate: part.toLowerCase().includes("plate"),
                   armorClass: parseInt(armorData.class),
                   bluntDamageThroughput: parseFloat(armorData.blunt_number),
-                  durability: parseInt(armorData.durability.current),
+                  durability: parseFloat(armorData.durability.current),
                   maxDurability: parseInt(armorData.durability.max),
                   armorMaterial: armorData.material
                 }
-              ]
             };
 
             const results = api.ballistics.calculateSingleShot(params);
-
             console.log(results);
-            //console.log(armorData);
-            //console.log(part);
+            console.log(results.penetrationChance);
+            if (probabilityCheck(results.penetrationChance*100)) {
+                console.log("Successful penetration (", results.penetrationChance*100, "% chance to pen!)");
+                //io.emit("updatePlate", part, Math.max((parseFloat(armorData.durability.current)-results.penetrationArmorDamage), 0));
+
+                currBulletDmg = currBulletDmg*results.reductionFactor;
+                currBulletPenetration = results.postArmorPenetration;
+                console.log("curr bullet dmg and penetration: ", currBulletDmg, currBulletPenetration);
+              }else{
+                console.log("Failure to penetrate (", (100 - (results.penetrationChance*100)), "% chance lowroll happened!)");
+                //io.emit("updatePlate", part, Math.max((parseFloat(armorData.durability.current)-results.penetrationArmorDamage), 0), armorData.durability.maxDurability);
+                
+                const damage = currBulletDmg*results.bluntDamage;
+                const flesh = findFirstFleshPart(intersects, i);
+                  if(flesh){
+                    if(bodyHP[flesh].currentHP - damage >= 0){
+                      bodyHP[flesh].currentHP = bodyHP[flesh].currentHP - damage;
+                    } else {
+                      const overflow = damage - bodyHP[flesh].currentHP ;
+                      bodyHP[flesh].currentHP = 0;
+                      bodyHP = api.ballistics.blackOutSpread(bodyHP, overflow, flesh);
+                    }
+                }
+                break;
+              }
+            
           }
       }
       socket.emit('updatePlate', {part:"soft-armor-Soft_armor_front", cur:10, max:20});
 
-      //console.log(bodyHP);
+      console.log("about to emit HP");
+      console.log(bodyHP);
+      //socket.emit('updateHP', bodyHP);
+      io.emit("updateHP", bodyHP);
     });
   
     const fleshParts = ["head", "thorax", "left_arm", "right_arm", "stomach", "right_leg", "left_leg"];

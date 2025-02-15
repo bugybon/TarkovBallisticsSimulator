@@ -16,7 +16,9 @@ const hitPartMultiplier = {
     right_arm: 0.49,
     left_leg: 0.7,
     right_leg: 0.7,
-    stomach: 1.05
+    stomach: 1.05,
+    // head: 100,
+    // thorax: 100
 }
 
 function getDestructibility(material) {
@@ -167,6 +169,7 @@ function blackOutSpread(bodyHP, overflow, hitPart) {
         }
     });
 
+    console.log(hitPartMultiplier["head"]);
     let damage = hitPartMultiplier[hitPart] * overflow;
 
     // Distribute damage
