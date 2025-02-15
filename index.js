@@ -109,6 +109,21 @@ io.on("connection", (socket) => {
       }
     });
 
+    socket.on('requestHelmetData', async(helmetName) => {
+      try {
+        const helmet = await findItemAsync(helmetName,HelmetDataBD); 
+
+          if (helmet) {
+              socket.emit('recieveHelmetData', helmet);
+          } else {
+              socket.emit('recieveHelmetDataError', { error: "Helmet not found" });
+          }
+      } catch (error) {
+          console.error("Error fetching helmet data:", error);
+          socket.emit('recieveHelmetDataError', { error: "Server error" });
+      }
+    });
+
     socket.on('plateSelected', async(plateName) => {
       try {
         const plate = await findItemAsync(plateName,armorPlateDataDB); 
