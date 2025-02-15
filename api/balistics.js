@@ -105,55 +105,51 @@ console.log(calculateReductionFactor(20, 100, 2));
 
 // Main Ballistic Calculation
 function calculateSingleShot(params) {
-    const results = [];
     let currentPenetration = params.penetration;
     let currentDamage = params.damage;
+    let layer = params.armorLayer;
+    
+    const armorDurabilityPerc = (layer.durability / layer.maxDurability) * 100;
+    const penChance = penetrationChance(layer.armorClass, currentPenetration, armorDurabilityPerc);
 
-    params.armorLayers.forEach(layer => {
-        const armorDurabilityPerc = (layer.durability / layer.maxDurability) * 100;
-        const penChance = penetrationChance(layer.armorClass, currentPenetration, armorDurabilityPerc);
+    const penDamage = penetrationDamage(armorDurabilityPerc, layer.armorClass, currentDamage, currentPenetration);
+    const mitigatedDamage = currentDamage - penDamage;
 
-        const penDamage = penetrationDamage(armorDurabilityPerc, layer.armorClass, currentDamage, currentPenetration);
-        const mitigatedDamage = currentDamage - penDamage;
+    var bluntThroughput = layer.bluntDamageThroughput;
+    if (layer.isPlate)
+    {
+        bluntThroughput = bluntThroughput * 0.6;
+    }        
 
-        var bluntThroughput = layer.bluntDamageThroughput;
-        if (layer.isPlate)
-        {
-            bluntThroughput = bluntThroughput * 0.6;
-        }        
+    const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, (bluntThroughput / 100), currentDamage, currentPenetration);
 
-        const bluntDmg = bluntDamage(armorDurabilityPerc, layer.armorClass, (bluntThroughput / 100), currentDamage, currentPenetration);
+    const avgDamage = (penDamage * penChance) + (bluntDmg * (1 - penChance));
 
-        const avgDamage = (penDamage * penChance) + (bluntDmg * (1 - penChance));
+    const penArmorDmg = damageToArmorPenetration(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
+    const blockArmorDmg = damageToArmorBlock(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
+    
+    const avgArmorDmg = (penArmorDmg * penChance) + (blockArmorDmg * (1 - penChance));
+    const postHitDurability = Math.max(layer.durability - avgArmorDmg, 0);
 
-        const penArmorDmg = damageToArmorPenetration(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
-        const blockArmorDmg = damageToArmorBlock(layer.armorClass, layer.armorMaterial, currentPenetration, params.armorDamagePerc, armorDurabilityPerc);
-        
-        const avgArmorDmg = (penArmorDmg * penChance) + (blockArmorDmg * (1 - penChance));
-        const postHitDurability = Math.max(layer.durability - avgArmorDmg, 0);
+    const reductionFactor = calculateReductionFactor(currentPenetration, armorDurabilityPerc, layer.armorClass);
+    currentPenetration *= reductionFactor;
+    currentDamage *= reductionFactor;
 
-        const reductionFactor = calculateReductionFactor(currentPenetration, armorDurabilityPerc, layer.armorClass);
-        currentPenetration *= reductionFactor;
-        currentDamage *= reductionFactor;
+    return {
+        penetrationChance: penChance,
+        penetrationDamage: penDamage,
+        mitigatedDamage: mitigatedDamage,
+        bluntDamage: bluntDmg,
+        averageDamage: avgDamage,
 
-        results.push({
-            penetrationChance: penChance,
-            penetrationDamage: penDamage,
-            mitigatedDamage: mitigatedDamage,
-            bluntDamage: bluntDmg,
-            averageDamage: avgDamage,
+        penetrationArmorDamage: penArmorDmg,
+        blockArmorDamage: blockArmorDmg,
+        averageArmorDamage: avgArmorDmg,
+        postHitArmorDurability: postHitDurability,
 
-            penetrationArmorDamage: penArmorDmg,
-            blockArmorDamage: blockArmorDmg,
-            averageArmorDamage: avgArmorDmg,
-            postHitArmorDurability: postHitDurability,
-
-            reductionFactor: reductionFactor,
-            postArmorPenetration: currentPenetration
-        });
-    });
-
-    return results;
+        reductionFactor: reductionFactor,
+        postArmorPenetration: currentPenetration
+    };
 }
 
 function blackOutSpread(bodyHP, overflow, hitPart) {
