@@ -50,11 +50,13 @@
     <div class="helmetDropdown">
         <button class="dropbtn">Helmet</button>
         <div class="helmetDropdown-content">
-            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.helmetDropdown-content', 'button-helmet')">
+            <input type="text" class="search-input" placeholder="Search..." onkeyup="filterOptions(this, '.helmetDropdown-content', 'button')">
         </div>
         <h1 id="helmetName"></h1>
         <img id="helmetImage" src="helmet.png"> 
     </div>
+
+    <div id="helmet-selection"></div>
 
     <div id="bullet"></div>
 
@@ -142,25 +144,113 @@
 
         socket.on('recieveHelmetNames', (names) => {
             const dropdownContent = document.querySelector('.helmetDropdown-content');
+            dropdownContent.innerHTML = ""; 
+
             console.log("Received helmet names:", names);
 
             const helmetName = document.getElementById('helmetName'); 
             const helmetImage = document.getElementById('helmetImage'); 
 
             names.forEach((option) => {
-                const button = document.createElement('button-helmet'); 
+                const button = document.createElement('button'); 
+                button.classList.add("helmet-button");
                 button.textContent = option;
                 button.onclick = () => {
-                console.log("Requesting helmet:", option);
-                socket.emit('requestHelmetData', option);
+                    console.log("Requesting helmet:", option);
+                    socket.emit('requestHelmetData', option);
 
-                helmetName.textContent = option;
-                helmetImage.src = `images/${option}.png`;
+                    helmetName.textContent = option;
+                    helmetImage.src = `images/${option}.png`;
                 };
 
                 dropdownContent.appendChild(button);
             });
         });
+
+        function extractHelmetSlots(data) {
+            const slots = [];
+            
+            if (!data || !data.items || data.items.length === 0) return slots;
+
+            const helmet = data.items[0]; // Assume we only receive one helmet at a time
+            helmet.properties.armorSlots.forEach(slot => {
+                slots.push({
+                    nameID: slot.nameId,
+                    class: slot.class,
+                    durability: slot.durability,
+                    bluntThroughput: slot.bluntThroughput,
+                    ricochetX: slot.ricochetX,
+                    ricochetY: slot.ricochetY,
+                    ricochetZ: slot.ricochetZ,
+                    material: slot.material ? slot.material.name : "Unknown"
+                });
+            });
+
+            return slots;
+        }
+
+        socket.on('recieveHelmetData', (data) => {
+            console.log("Received helmet data:", data);
+            removeHelmetContainer(); // Clear any previous helmets
+            createHelmetContainer(data); // Create new helmet display
+        });
+
+        function removeHelmetContainer() {
+            const helmetSelection = document.getElementById('helmet-selection');
+            if (helmetSelection) {
+                helmetSelection.innerHTML = ""; // Clear previous helmet data
+            }
+        }
+
+        function createHelmetContainer(data) {
+            const helmetSelection = document.getElementById('helmet-selection');
+            if (!helmetSelection) return;
+
+            data.properties.armorSlots.forEach(slot => {
+                const container = document.createElement('div');
+                container.classList.add('helmet-container');
+                container.id = `helmet-${slot.nameId.replace(/\s+/g, "_")}`;
+
+                const imgContainer = document.createElement('div');
+                imgContainer.classList.add('helmet-image-container');
+
+                const img = document.createElement('img');
+                //img.classList.add('helmet-image');
+                img.src = `images/${slot.nameId.replace(/\s+/g, '_')}.png`;
+                // img.alt = slot.nameId;
+                imgContainer.appendChild(img);
+
+                const infoContainer = document.createElement('div');
+                infoContainer.classList.add('helmet-info');
+
+                const nameLabel = document.createElement('p');
+                nameLabel.textContent = `Area: ${slot.nameId}`;
+                nameLabel.classList.add('helmet-label');
+
+                const classLabel = document.createElement('p');
+                classLabel.textContent = `Class: ${slot.class}`;
+
+                const durabilityLabel = document.createElement('p');
+                durabilityLabel.textContent = `Durability: ${slot.durability} / ${slot.durability}`;
+
+                const materialLabel = document.createElement('p');
+                materialLabel.textContent = `Material: ${slot.material.name}`;
+
+                const throughputLabel = document.createElement('p');
+                throughputLabel.textContent = `Blunt number: ${slot.bluntThroughput}`;
+
+                infoContainer.appendChild(nameLabel);
+                infoContainer.appendChild(classLabel);
+                infoContainer.appendChild(durabilityLabel);
+                infoContainer.appendChild(materialLabel);
+                infoContainer.appendChild(throughputLabel);
+
+                container.appendChild(imgContainer);
+                container.appendChild(infoContainer);
+
+                helmetSelection.appendChild(container);
+            });
+        }
 
         function createBulletContainer(data){
 

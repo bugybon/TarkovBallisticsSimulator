@@ -126,7 +126,7 @@ canvas{
 #resetHPBtn {
     position: absolute;
     width: 130px;                   
-    top: 450px;             
+    top: 750px;             
     right: 300px;            
     padding: 8px 16px;
     background-color: #eee;
@@ -136,7 +136,7 @@ canvas{
 
 #visibleRay {
     position: absolute;                        
-    top: 500px;
+    top: 800px;
     width: 130px;
     right: 300px;            
     padding: 8px 16px;
@@ -293,6 +293,11 @@ canvas{
     display: inline-block;
 }
 
+
+
+
+
+
 .helmetDropdown {
     position: absolute;
     left: 225px; /* Position next to armor button */
@@ -307,9 +312,9 @@ canvas{
     background-color: #f1f1f1;
     min-width: 500px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 2;
+    z-index: 1;
     max-height: 300px;
-    overflow-y: auto; /* Enables scrolling for long lists */
+    overflow-y: auto; 
 }
 
 .helmetDropdown-content button-helmet {
@@ -362,45 +367,41 @@ canvas{
     display: inline-block;
 }
 
-/* The hidden dropdown menu container for helmets */
-.helmetDropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 500px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 2; /* Make sure it's above other elements */
-    max-height: 300px; 
-    overflow-y: auto; /* Scrolling if there are many helmet options */
-}
-
 /* Buttons inside the helmet dropdown */
 .helmetDropdown-content {
     display: none;
     position: absolute;
+    left: 0; /* Align directly under the button */
     background-color: #f1f1f1;
-    min-width: 100%;
-    top: 100%;
-    left: 0;
+    min-width: 500px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 2;
-    max-height: 300px;
+    /* z-index: 2; */
+    max-height: 1000px;
     overflow-y: auto;
 }
 
-/* Hover effect on the helmet buttons */
-.helmetDropdown-content button-helmet:hover {
+/* Style the helmet buttons like armor buttons */
+.helmetDropdown-content button {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 16px;
+    text-align: left;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px; /* Keep text readable */
+}
+
+/* Hover effect */
+.helmetDropdown-content button:hover {
     background-color: #ddd;
 }
 
-/* Show the dropdown on hover */
+/* Show dropdown when hovering */
 .helmetDropdown:hover .helmetDropdown-content {
     display: block;
-}
-
-/* Change the main button color on hover */
-.helmetDropdown:hover .dropbtn {
-    background-color: #3e8e41;
 }
 
 #helmetName {
@@ -409,4 +410,67 @@ canvas{
     text-align: center; /* Center the name */
     display: block; /* Ensure it stays on its own line */
     margin-top: 5px; /* Add spacing below the button */
+}
+
+
+/* Helmet selection container */
+#helmet-selection {
+    position: absolute;
+    top: 150px; /* Adjust as necessary */
+    left: 1425px; /* Align it properly */
+    width: 270px;
+    /* background-color: rgba(255, 255, 255, 0.9); */
+    padding: 10px;
+    /* border-radius: 8px; */
+    /* border: 1px solid #ccc; */
+    /* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); */
+    z-index: 5; /* Ensure it appears above other elements */
+}
+
+.helmet-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    /* background-color: rgba(240, 240, 240, 0.9); */
+    /* border-radius: 5px; */
+}
+
+/* Helmet image - align to right side */
+.helmet-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    /* border-radius: 4px; */
+}
+
+/* Helmet slot image */
+.helmet-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* Helmet info container */
+.helmet-info {
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+/* Helmet slot name */
+.helmet-label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Helmet slot details */
+.helmet-info p {
+    font-size: 12px;
+    margin: 2px 0;
 }
