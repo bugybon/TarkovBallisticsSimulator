@@ -126,8 +126,8 @@ canvas{
 #resetHPBtn {
     position: absolute;
     width: 130px;                   
-    top: 850px;             
-    right: 300px;            
+    top: 950px;             
+    right: 100px;            
     padding: 8px 16px;
     background-color: #eee;
     border: 1px solid #ccc;
@@ -136,9 +136,9 @@ canvas{
 
 #visibleRay {
     position: absolute;                        
-    top: 900px;
+    top: 1000px;
     width: 130px;
-    right: 300px;            
+    right: 100px;            
     padding: 8px 16px;
     background-color: #eee;
     border: 1px solid #ccc;
@@ -432,7 +432,7 @@ canvas{
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-    /* background-color: rgba(240, 240, 240, 0.9); */
+    background-color: rgb(255, 251, 251);
     /* border-radius: 5px; */
 }
 

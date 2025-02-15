@@ -158,6 +158,7 @@
                     console.log("Requesting helmet:", option);
                     socket.emit('requestHelmetData', option);
 
+                    console.log(option);
                     helmetName.textContent = option;
                     helmetImage.src = `images/${option}.png`;
                 };
@@ -165,34 +166,6 @@
                 dropdownContent.appendChild(button);
             });
         });
-
-        socket.on('recieveHelmetNames', (names) => {
-            const dropdownContent = document.querySelector('.helmetDropdown-content');
-            dropdownContent.innerHTML = ""; 
-
-            const searchInput = document.createElement("input");
-            searchInput.type = "text";
-            searchInput.classList.add("search-input");
-            searchInput.placeholder = "Search...";
-            searchInput.setAttribute("onkeyup", "filterOptions(this, '.helmetDropdown-content', '.button-helmet')");
-            dropdownContent.appendChild(searchInput); // Add input to the dropdown
-
-            console.log("Received helmet names:", names);
-
-            names.forEach((option) => {
-                const button = document.createElement("button"); // Standard <button> element
-                button.classList.add("button-helmet"); // Use class for search filtering
-                button.textContent = option;
-                button.onclick = () => {
-                    console.log("Requesting helmet:", option);
-                    socket.emit("requestHelmetData", option);
-                };
-
-                dropdownContent.appendChild(button);
-            });
-        });
-
-        
 
         function extractHelmetSlots(data) {
             const slots = [];
@@ -266,11 +239,23 @@
                 const throughputLabel = document.createElement('p');
                 throughputLabel.textContent = `Blunt number: ${slot.bluntThroughput}`;
 
+                const ricochetX = document.createElement('p');
+                ricochetX.textContent = `Ricochet number X axis: ${slot.ricochetX}`;
+
+                const ricochetY = document.createElement('p');
+                ricochetY.textContent = `Ricochet number Y axis: ${slot.ricochetY}`;
+
+                const ricochetZ = document.createElement('p');
+                ricochetZ.textContent = `Ricochet number Z axis: ${slot.ricochetZ}`;
+
                 infoContainer.appendChild(nameLabel);
                 infoContainer.appendChild(classLabel);
                 infoContainer.appendChild(durabilityLabel);
                 infoContainer.appendChild(materialLabel);
                 infoContainer.appendChild(throughputLabel);
+                // infoContainer.appendChild(ricochetX);
+                // infoContainer.appendChild(ricochetY);
+                // infoContainer.appendChild(ricochetZ);
 
                 container.appendChild(imgContainer);
                 container.appendChild(infoContainer);
@@ -299,11 +284,15 @@
             
             const projectilesCount = document.createElement('p');
             projectilesCount.textContent = `Projectile Count: ${data.projectileCount}`;
+
+            const ricochetChance = document.createElement('p');
+            ricochetChance.testContent = `Ricochet chance: ${data.ricochetChance}`;
             
             container.appendChild(damage);
             container.appendChild(armorDamage);
             container.appendChild(penetration);
             container.appendChild(projectilesCount);
+            container.appendChild(ricochetChance);
 
             bulletContainer.appendChild(container);
         }
