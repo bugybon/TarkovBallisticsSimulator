@@ -171,7 +171,7 @@ window.addEventListener('click', (event) => {
         if(arrow){
             scene.remove(arrow);
         }
-        arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000);
+        arrow = new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 300, 0xff0000, 0.05, 0.05);
         scene.add(arrow);
     }else if (!visibleArrow && arrow){
         scene.remove(arrow);
