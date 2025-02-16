@@ -233,17 +233,21 @@ io.on("connection", (socket) => {
             return Math.random() < (chance / 100);
         }
 
+        async function getHelmetData(part) {
+            return new Promise((resolve, reject) => {
+                socket.emit("getHelmetPart", part);
+                socket.once("sendHelmetPart", (helmetData) => {
+                    resolve(helemtData);
+                });
+            });
+        }
+
         async function getArmorData(part) {
           return new Promise((resolve, reject) => {
               socket.emit("getArmorPart", part);
               socket.once("sendArmorPart", (armorData) => {
                   resolve(armorData);
               });
-      
-              // setTimeout(() => {
-              //     console.error(`Timeout: No response for armor part ${part}`);
-              //     reject(new Error(`Timeout waiting for armor data: ${part}`));
-              // }, 2000);
           });
       }
 
@@ -285,6 +289,8 @@ io.on("connection", (socket) => {
                 console.log("Failure to penetrate (", (100 - penChance), "% chance lowroll happened!)");
                 break;
             }
+          }else if (part.toLowerCase().includes("helmet")){
+                
           }else{
             const armorData = await getArmorData(part);
             console.log(armorData);
@@ -308,17 +314,11 @@ io.on("connection", (socket) => {
                 }
             };
 
-            console.log(params);
+            // console.log(params);
 
             const results = api.ballistics.calculateSingleShot(params);
             // console.log(results);
             // console.log(results.penetrationChance);
-
-            console.log({
-              part: part,
-              cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
-              max: parseFloat(armorData.durability.max)
-            });
 
             if (probabilityCheck(results.penetrationChance*100)) {
                 console.log("Successful penetration (", results.penetrationChance*100, "% chance to pen!)");
@@ -356,11 +356,8 @@ io.on("connection", (socket) => {
             
           }
       }
-      //socket.emit('updatePlate', {part:"soft-armor-Soft_armor_front", cur:10, max:20});
 
-      console.log("about to emit HP");
       console.log(bodyHP);
-      //socket.emit('updateHP', bodyHP);
       socket.emit("updateHP", bodyHP);
     });
   

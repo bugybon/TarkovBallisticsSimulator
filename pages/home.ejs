@@ -191,14 +191,14 @@
 
         socket.on('recieveHelmetData', (data) => {
             console.log("Received helmet data:", data);
-            removeHelmetContainer(); // Clear any previous helmets
-            createHelmetContainer(data); // Create new helmet display
+            removeHelmetContainer(); 
+            createHelmetContainer(data); 
         });
 
         function removeHelmetContainer() {
             const helmetSelection = document.getElementById('helmet-selection');
             if (helmetSelection) {
-                helmetSelection.innerHTML = ""; // Clear previous helmet data
+                helmetSelection.innerHTML = ""; 
             }
         }
 
@@ -569,6 +569,7 @@
                     damage: parseInt(damageElement.textContent.split(": ")[1], 10),
                     armorDamage: parseInt(armorDamageElement.textContent.split(": ")[1], 10),
                     penetration: parseInt(penetrationElement.textContent.split(": ")[1], 10),
+                    // ricochetChance: parseFloat(ricochetElement.textContent.split(": ")[1], 10)
                 };
 
                 socket.emit("sendBulletData", bulletData);
@@ -609,7 +610,7 @@
         socket.on("getArmorPart", (name) => {
             let armorDiv;
             let armorContainer = document.getElementById(name);
-            console.log("armorContainer=",armorContainer);
+            // console.log("armorContainer=",armorContainer);
            
             if(!armorContainer){
                 socket.emit("sendArmorPart", { error: `Armor part ${name} not found` });
@@ -619,7 +620,7 @@
             }else{
                 armorDiv = armorContainer.querySelector(".plate-info");
             }
-            console.log(armorDiv);
+            //console.log(armorDiv);
 
             if (!armorDiv) {
                 console.error(`Armor info div not found inside: ${name}`);
@@ -645,6 +646,44 @@
 
             //console.log(armorInfo);
             socket.emit("sendArmorPart", armorInfo);
+        });
+
+        socket.on("getHelmetPart", (name) => {
+            let helmetDiv;
+            let helmetContainer = document.getElementById(name);
+            // console.log("helmetContainer=", helmetContainer);
+           
+            if(!helmetContainer){
+                socket.emit("helmetArmorPart", { error: `Helmet part ${name} not found` });
+            }
+            
+            helmetDiv = helmetContainer.querySelector(".helmet-info");
+            //console.log(helmetDiv);
+
+            if (!helmetDiv) {
+                console.error(`Helmet info div not found inside: ${name}`);
+                socket.emit("sendHelmetPart", { error: `Helmet info missing in ${name}` });
+                return;
+            }
+
+            const helmetInfo = {};
+            helmetDiv.querySelectorAll("p").forEach((p) => {
+                const [key, value] = p.textContent.split(": ").map(str => str.trim());
+                if (key && value) {
+                    if (key.toLowerCase() === "durability") {
+                        let [current, max] = value.split("/").map(str => str.trim());
+                        helmetInfo["durability"] = {
+                            current: parseInt(current),
+                            max: parseInt(max)
+                        };
+                    } else {
+                        helmetInfo[key.toLowerCase().replace(/ /g, "_")] = value;
+                    }
+                }
+            });
+
+            //console.log(armorInfo);
+            socket.emit("sendHelmetPart", helmetInfo);
         });
 
         socket.on("updatePlate", (param) =>{
