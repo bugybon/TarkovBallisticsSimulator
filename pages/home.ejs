@@ -562,7 +562,7 @@
             const damageElement = bulletContainer.querySelector('p:nth-child(1)');
             const armorDamageElement = bulletContainer.querySelector('p:nth-child(2)');
             const penetrationElement = bulletContainer.querySelector('p:nth-child(3)');
-            const ricochetElement = bulletContainer.querySelector('p:nth-child(4)');
+            // const ricochetElement = bulletContainer.querySelector('p:nth-child(4)');
 
             if (damageElement && armorDamageElement && penetrationElement) {
                 const bulletData = {
@@ -650,9 +650,8 @@
 
         socket.on("getHelmetPart", (name) => {
             let helmetDiv;
-            let helmetContainer = document.getElementById(name);
+            let helmetContainer = document.getElementById("helmet-"+ name);
             // console.log("helmetContainer=", helmetContainer);
-           
             if(!helmetContainer){
                 socket.emit("helmetArmorPart", { error: `Helmet part ${name} not found` });
             }
@@ -687,7 +686,7 @@
         });
 
         socket.on("updatePlate", (param) =>{
-            console.log(param.part);
+            // console.log(param.part);
             let plate = document.getElementById(param.part).children;
             if(param.part.includes("soft")){
                 plate = plate.item(0).children.item(1);
@@ -696,6 +695,14 @@
             }
             //console.log(plate);
             plate.innerText = "Durability: " + param.cur + " / " + param.max;
+        });
+
+        socket.on("updateHelmet", (param) =>{
+            // console.log(param.part);
+            let helmet = document.getElementById("helmet-"+param.part).children;
+            helmet = helmet.item(1).children.item(2);
+            //console.log(plate);
+            helmet.innerText = "Durability: " + param.cur + " / " + param.max;
         });
 
         const defaultHP = {

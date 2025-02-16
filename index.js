@@ -224,6 +224,7 @@ io.on("connection", (socket) => {
         let currBulletDmg = bulletData.damage;
         let currBulletPenetration = bulletData.penetration;
         let armorDamage = bulletData.armorDamage;
+        //let ricochet = bulletData.ricochetChance;
 
         function mapHitboxToPart(hitboxName) {
             return hitboxToPartMapping[hitboxName] || "unknown"; 
@@ -237,7 +238,7 @@ io.on("connection", (socket) => {
             return new Promise((resolve, reject) => {
                 socket.emit("getHelmetPart", part);
                 socket.once("sendHelmetPart", (helmetData) => {
-                    resolve(helemtData);
+                    resolve(helmetData);
                 });
             });
         }
@@ -289,10 +290,14 @@ io.on("connection", (socket) => {
                 console.log("Failure to penetrate (", (100 - penChance), "% chance lowroll happened!)");
                 break;
             }
-          }else if (part.toLowerCase().includes("helmet")){
-                
           }else{
-            const armorData = await getArmorData(part);
+            let armorData;
+            if (part.toLowerCase().includes("helmet")){
+              armorData = await getHelmetData(part);
+            } else {
+              armorData = await getArmorData(part);
+            }
+            
             console.log(armorData);
             //console.log(part);
 
@@ -304,6 +309,7 @@ io.on("connection", (socket) => {
               penetration: currBulletPenetration,
               damage: currBulletDmg,
               armorDamagePerc: armorDamage,
+              // ricochetChance: ricochet,
               armorLayer: {
                   isPlate: part.toLowerCase().includes("plate"),
                   armorClass: parseInt(armorData.class),
@@ -311,6 +317,7 @@ io.on("connection", (socket) => {
                   durability: parseFloat(armorData.durability.current),
                   maxDurability: parseFloat(armorData.durability.max),
                   armorMaterial: armorData.material
+                   // ricochetChance: {helmetData.ricochetX, helmetData.ricochetY, helmetData.ricochetZ}
                 }
             };
 
@@ -320,24 +327,32 @@ io.on("connection", (socket) => {
             // console.log(results);
             // console.log(results.penetrationChance);
 
+            function updateData(dataName){
+              socket.emit(dataName, {
+                part: part,
+                cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
+                max: parseFloat(armorData.durability.max)
+              });
+            }
+
             if (probabilityCheck(results.penetrationChance*100)) {
                 console.log("Successful penetration (", results.penetrationChance*100, "% chance to pen!)");
-                socket.emit('updatePlate', {
-                  part: part,
-                  cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
-                  max: parseFloat(armorData.durability.max)
-                });
+                if(part.toLowerCase().includes("helmet")){
+                  updateData('updateHelmet');
+                } else {
+                  updateData('updatePlate');
+                }
 
                 currBulletDmg = currBulletDmg*results.reductionFactor;
                 currBulletPenetration = results.postArmorPenetration;
                 console.log("curr bullet dmg and penetration: ", currBulletDmg, currBulletPenetration);
               }else{
                 console.log("Failure to penetrate (", (100 - (results.penetrationChance*100)), "% chance lowroll happened!)");
-                socket.emit('updatePlate', {
-                  part: part,
-                  cur: Math.max(parseFloat(armorData.durability.current) - results.penetrationArmorDamage, 0),
-                  max: parseFloat(armorData.durability.max)
-                });
+                if(part.toLowerCase().includes("helmet")){
+                  updateData('updateHelmet');
+                } else {
+                  updateData('updatePlate');
+                }
                 
                 const damage = (currBulletDmg-results.mitigatedDamage)*results.bluntDamage*results.reductionFactor;
                 console.log(damage);
