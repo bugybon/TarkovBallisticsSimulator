@@ -156,13 +156,11 @@ function calculateSingleShot(params) {
 
 function blackOutSpread(bodyHP, overflow, hitPart) {
     let currentMaxHP = 0;
-
-    // Compute the total max HP
+    
     Object.values(bodyHP).forEach((part) => {
         currentMaxHP += part.maxHP;
     });
 
-    // Reduce max HP if a part is fully destroyed
     Object.values(bodyHP).forEach((part) => {
         if (part.currentHP === 0) {
             currentMaxHP -= part.maxHP;
@@ -172,7 +170,6 @@ function blackOutSpread(bodyHP, overflow, hitPart) {
     console.log(hitPartMultiplier["head"]);
     let damage = hitPartMultiplier[hitPart] * overflow;
 
-    // Distribute damage
     Object.values(bodyHP).forEach((part) => {
         if (part.currentHP !== 0) {
             part.currentHP = Math.max(part.currentHP - Math.round(damage * part.maxHP / currentMaxHP), 0);

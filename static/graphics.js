@@ -115,7 +115,6 @@ function loadAsset( asset, name ) {
         // }
     });
      
-    // wait until the model can be added to the scene without blocking due to shader compilation
 
     await renderer.compileAsync( model, camera, scene );
 
@@ -150,10 +149,8 @@ let arrow;
 // const camera = YOUR_CAMERA; // Replace with your camera
 // const scene = YOUR_SCENE; // Replace with your scene
 
-// On mouse click
 window.addEventListener('click', (event) => {
 
-    // Update pointer coordinates
     pointer.x = ((event.clientX / window.innerWidth) * 2 - 1)/widthAspect;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
